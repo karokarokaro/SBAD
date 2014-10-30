@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
-public class RoutePage extends AbstractPage {
+public class RouterPage extends AbstractPage {
 
-    public RoutePage(HttpServletRequest request, HttpServletResponse response) {
+    public RouterPage(HttpServletRequest request, HttpServletResponse response) {
         super(request, response);
     }
 
@@ -28,7 +28,7 @@ public class RoutePage extends AbstractPage {
         if (page != null) {
             page.executeRequest();
         } else {
-            throw new RedirectException("/login.jsp");
+            throw new RedirectException("/crm/login.jsp");
         }
     }
 }
