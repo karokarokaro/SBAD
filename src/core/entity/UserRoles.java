@@ -1,12 +1,12 @@
 package core.entity;
 
 
-public enum CampTypes {
+public enum UserRoles {
     OAO("ОАО"), OOO("ООО"), IP("ИП");
 
     private final String name;
 
-    private CampTypes(String s) {
+    private UserRoles(String s) {
         name = s;
     }
     public String toString(){
