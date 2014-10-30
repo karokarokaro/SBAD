@@ -27,6 +27,7 @@ public class MainPage extends HtmlPage {
 
     protected void init() throws Exception {
         super.init();
+        addScriptFile("/js/admin.js");
         addScriptFile("/js/inedit.js");
         setTitle("Главная страница | CRM");
     }

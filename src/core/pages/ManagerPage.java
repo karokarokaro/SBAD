@@ -16,10 +16,7 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ManagerPage extends HtmlPage {
 
@@ -29,8 +26,9 @@ public class ManagerPage extends HtmlPage {
 
     protected void init() throws Exception {
         super.init();
-        addScriptFile("/js/inedit.js");
-        setTitle("Главная страница | CRM");
+        addScriptFile("/js/admin2.js");
+        addScriptFile("/js/inedit2.js");
+        setTitle("Главная страница");
     }
 
     protected void authorize() throws Exception {

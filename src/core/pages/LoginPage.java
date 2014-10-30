@@ -4,6 +4,7 @@ import core.database.Attributes;
 import core.database.DBAttribute;
 import core.database.DBObject;
 import core.entity.User;
+import core.entity.UserRoles;
 import core.entity.search.SearchParams;
 import core.exceptions.RedirectException;
 import core.helpers.HashHelper;
@@ -25,6 +26,12 @@ public class LoginPage extends HtmlPage {
 
 
     protected String message;
+
+    protected void init() throws Exception {
+        super.init();
+        //addScriptFile("/js/admin.js");
+        //addScriptFile("/js/inedit.js");
+    }
 
     public LoginPage(HttpServletRequest request, HttpServletResponse response) {
         super(request, response);
@@ -62,8 +69,8 @@ public class LoginPage extends HtmlPage {
                 } else {
                     User user = new User();
                     user.setId(userDB.getId());
-                    DBAttribute isAdminAttr = userDB.getAttributeById(Attributes.IS_ADMIN);
-                    user.setIsAdmin(isAdminAttr != null && isAdminAttr.getBooleanValue());
+                    DBAttribute roleAttr = userDB.getAttributeById(Attributes.ROLE);
+                    user.setRole(UserRoles.get(roleAttr.getTextValue()));
                     user.setLogin(paramLogin);
                     user.setPassHash(HashHelper.getPasswordHash(paramPassword));
                     user.setLoginTime(new Timestamp(1));

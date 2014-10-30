@@ -23,5 +23,7 @@ public class Attributes {
     public static final String SOURCE = "45";
     public static final String ADDITIONAL_NUMBER = "46";
     public static final String IS_ADMIN = "47";
+    public static final String ROLE = "48";
+
 }
 

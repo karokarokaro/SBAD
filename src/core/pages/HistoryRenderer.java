@@ -26,6 +26,11 @@ public class HistoryRenderer extends HtmlPage {
     public HistoryRenderer(HttpServletRequest request, HttpServletResponse response) {
         super(request, response);
     }
+    protected void init() throws Exception {
+        super.init();
+        addScriptFile("/js/admin.js");
+        addScriptFile("/js/inedit.js");
+    }
     protected void parseParams() throws Exception {
         paramCampId = request.getParameter("campId");
     }

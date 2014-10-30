@@ -41,7 +41,7 @@ public class HtmlPage extends AbstractPage {
         addScriptFile("/js/moment-with-langs.min.js");
         addScriptFile("/js/jquery.datetimepicker.js");
         addScriptFile("/js/bootstrap-datetimepicker.ru.js");
-        addScriptFile("/js/admin.js");
+
 
         addMetaByHttpEquiv("Content-Type", "text/html; charset=utf-8");
         addMetaByName("viewport", "width=device-width, initial-scale=1.0");

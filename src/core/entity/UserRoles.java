@@ -2,7 +2,7 @@ package core.entity;
 
 
 public enum UserRoles {
-    OAO("ОАО"), OOO("ООО"), IP("ИП");
+    Manager("Manager"), Buyer("Buyer"), Driver("Driver"), Admin("Admin");
 
     private final String name;
 
@@ -14,6 +14,13 @@ public enum UserRoles {
     }
 
     public boolean equalsName(String otherName){
-        return (otherName == null)? false : name.equals(otherName);
+        return name.equalsIgnoreCase(otherName);
     }
+    
+    public static UserRoles get(String value) {
+        for (int i = 0; i < values().length; ++i) {
+            if (values()[i].equalsName(value)) return values()[i];
+        }
+        return null;
+    } 
 }

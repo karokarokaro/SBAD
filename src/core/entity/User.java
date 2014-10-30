@@ -8,17 +8,19 @@ public class User {
     private String login;
     private String passHash;
     private Timestamp loginTime;
-    private boolean isAdmin;
+    private UserRoles role;
 
     public boolean isAdmin() {
-        return isAdmin;
+        return UserRoles.Admin.equals(role);
     }
 
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setRole(UserRoles role) {
+        this.role = role;
     }
 
-
+    public UserRoles getRole() {
+        return role;
+    }
 
     public BigInteger getId() {
         return id;
