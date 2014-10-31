@@ -14,6 +14,10 @@ public class User {
         return UserRoles.Admin.equals(role);
     }
 
+    public boolean isGuest() {
+        return UserRoles.Guest.equals(role);
+    }
+
     public void setRole(UserRoles role) {
         this.role = role;
     }

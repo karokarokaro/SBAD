@@ -70,6 +70,28 @@ public class TempHelper {
         }
         return res;
     }
+    public static List<DBObject> getTasksByUser(User user) {
+        List<BigInteger> ids = new ArrayList<BigInteger>();
+        try {
+            ResultSet resultSet = SQLController.executeSelect("select object_id from vals where attr_id=" +
+                    Attributes.CREATED_BY + " and id_v = " + user.getId().toString());
+            while (resultSet.next()) {
+                BigInteger id = resultSet.getBigDecimal("object_id").toBigInteger();
+                ids.add(id);
+                ObjectCache.addIdToLoad(id);
+            }
+        } catch (Exception e) {
+            Logger.error(e);
+        }
+        List<DBObject> res = new ArrayList<DBObject>();
+        for (BigInteger id: ids) {
+            DBObject dbObject = ObjectCache.getObject(id);
+            if (dbObject != null) {
+                res.add(dbObject);
+            }
+        }
+        return res;
+    }
     public static boolean siteOccurs(String site) {
         PreparedStatement ps;
         try{

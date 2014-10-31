@@ -1,14 +1,10 @@
 package core.pages;
 
-import core.Logger;
-import core.entity.User;
 import core.entity.UserRoles;
 import core.exceptions.RedirectException;
-import core.helpers.SQLController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 
 public class RouterPage extends AbstractPage {
 
@@ -22,8 +18,8 @@ public class RouterPage extends AbstractPage {
 
     protected void execute() throws Exception {
         AbstractPage page = null;
-        if (UserRoles.Manager.equals(getUser().getRole())) page = new ManagerPage(request, response);
-        if (UserRoles.Buyer.equals(getUser().getRole())) page = new ManagerPage(request, response);
+        if (UserRoles.Manager.equals(getUser().getRole())) page = new CampEditorPage(request, response);
+        if (UserRoles.Buyer.equals(getUser().getRole())) page = new CampEditorPage(request, response);
 
         if (page != null) {
             page.executeRequest();

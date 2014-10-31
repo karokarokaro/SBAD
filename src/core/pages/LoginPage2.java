@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
-public class LoginPage extends HtmlPage {
+public class LoginPage2 extends HtmlPage {
     protected String paramLogin;
     protected String paramPassword;
     protected String paramAct;
@@ -33,9 +33,9 @@ public class LoginPage extends HtmlPage {
         //addScriptFile("/js/inedit.js");
     }
 
-    public LoginPage(HttpServletRequest request, HttpServletResponse response) {
+    public LoginPage2(HttpServletRequest request, HttpServletResponse response) {
         super(request, response);
-        setTitle("Добро пожаловать | CRM");
+        setTitle("Добро пожаловать");
     }
 
     protected void parseParams() throws Exception {
@@ -70,13 +70,18 @@ public class LoginPage extends HtmlPage {
                     User user = new User();
                     user.setId(userDB.getId());
                     DBAttribute roleAttr = userDB.getAttributeById(Attributes.ROLE);
-                    user.setRole(UserRoles.get(roleAttr.getTextValue()));
+                    UserRoles role = UserRoles.get(roleAttr.getTextValue());
+                    if (role != null) {
+                        user.setRole(role);
+                    } else {
+                        user.setRole(UserRoles.Guest);
+                    }
                     user.setLogin(paramLogin);
                     user.setPassHash(HashHelper.getPasswordHash(paramPassword));
                     user.setLoginTime(new Timestamp(1));
                     setUser(user);
                     if (true/*old user*/)
-                    throw new RedirectException("/");
+                    throw new RedirectException("/crm/");
                 }
             }
         } else if (ACT_LOGOUT.equals(paramAct)) {

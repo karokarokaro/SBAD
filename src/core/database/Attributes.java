@@ -25,5 +25,9 @@ public class Attributes {
     public static final String IS_ADMIN = "47";
     public static final String ROLE = "48";
 
+    public static final String ADDRESS = "49";
+    public static final String MAP = "50";
+    public static final String KM = "51";
+
 }
 

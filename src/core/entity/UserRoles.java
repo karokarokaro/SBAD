@@ -2,7 +2,7 @@ package core.entity;
 
 
 public enum UserRoles {
-    Manager("Manager"), Buyer("Buyer"), Driver("Driver"), Admin("Admin");
+    Manager("Manager"), Buyer("Buyer"), Driver("Driver"), Admin("Admin"), Guest("Guest");
 
     private final String name;
 
@@ -23,4 +23,14 @@ public enum UserRoles {
         }
         return null;
     } 
+    
+    public String getDescription() {
+        if (Manager.equals(this)) return "Менеджер";
+        if (Buyer.equals(this)) return "Закупщик";
+        if (Driver.equals(this)) return "Водитель";
+        if (Admin.equals(this)) return "Администратор";
+        if (Guest.equals(this)) return "Гость";
+        return "";
+
+    }
 }
