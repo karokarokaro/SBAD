@@ -1,5 +1,5 @@
 function onErrorResponse(response, newValue) {
-    return "Ошибка. "
+    return "Ошибка. ";
 }
 function onSuccessResponse(response, newValue) {
     if (typeof response == "undefined") {
