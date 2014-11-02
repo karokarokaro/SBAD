@@ -28,6 +28,9 @@ public class Attributes {
     public static final String ADDRESS = "49";
     public static final String MAP = "50";
     public static final String KM = "51";
+    public static final String TIME_NEEDED = "52";
+    public static final String BILL_NBR = "53";
+
 
 }
 

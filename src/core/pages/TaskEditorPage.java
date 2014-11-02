@@ -1,17 +1,22 @@
 package core.pages;
 
 
+import core.cache.ObjectCache;
 import core.database.Attributes;
 import core.database.DBAttribute;
 import core.database.DBObject;
+import core.entity.CampTypes;
 import core.exceptions.RedirectException;
 import core.helpers.TempHelper;
 import core.helpers.TemplateRenderer;
+import sun.plugin.javascript.navig.Array;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class TaskEditorPage extends HtmlPage {
@@ -35,6 +40,7 @@ public class TaskEditorPage extends HtmlPage {
     protected void renderBody() throws Exception {
         TemplateRenderer body = new TemplateRenderer(request, response, new BigInteger("1415")) {
             protected void mapTemplateModel() throws Exception {
+                DBAttribute attr;
                 Map user = new HashMap<String, String>();
                 templateParams.put("user", user);
                 user.put("login", getUser().getLogin());
@@ -42,11 +48,6 @@ public class TaskEditorPage extends HtmlPage {
                 user.put("isAdmin", getUser().isAdmin());
                 user.put("isGuest", getUser().isGuest());
                 user.put("roleDescr", getUser().getRole().getDescription());
-//                Map campTypes = new HashMap();
-//                templateParams.put("campTypes", campTypes);
-//                campTypes.put("oao", CampTypes.OAO.ordinal());
-//                campTypes.put("ooo", CampTypes.OOO.ordinal());
-//                campTypes.put("ip", CampTypes.IP.ordinal());
                 List tasks = new ArrayList();
                 templateParams.put("tasks", tasks);
                 List<DBObject> taskObjects = TempHelper.getTasksByUser(getUser());
@@ -67,119 +68,101 @@ public class TaskEditorPage extends HtmlPage {
                     tasks.add(task);
                     task.put("seqNumber", i);
                     task.put("id", obj.getId().toString());
-//                    DBAttribute callDate = obj.getAttributeById(Attributes.CALL_DATE);
-//                    String styleClass = "";
-//                    Calendar tomorrow = Calendar.getInstance();
-//                    if (callDate != null) {
-//                        if (!callDate.getTimestampValue().after(tomorrow.getTime())) {
-//                            styleClass = "danger";
-//                        } else {
-//                            tomorrow.set(Calendar.HOUR_OF_DAY, 23);
-//                            tomorrow.set(Calendar.MINUTE, 59);
-//                            if (!callDate.getTimestampValue().after(tomorrow.getTime())) {
-//                                styleClass = "success";
-//                            }
-//                        }
-//
-//                    }
-//                    campaign.put("styleClass", styleClass);
-//                    int typ = obj.getAttributeById(Attributes.TYPE).getIntValue();
-//                    campaign.put("type", (typ >= 0 && typ < 3) ? CampTypes.values()[typ].toString() : "");
+                    Map comment = new HashMap();
+                    task.put("comment", comment);
+                    comment.put("attrId", Attributes.COMMENT);
+                    attr = obj.getAttributeById(Attributes.COMMENT);
+                    if (attr != null) {
+                        comment.put("value", attr.getTextValue());
+                    } else {
+                        comment.put("value", "");
+                    }
+                    Map date = new HashMap();
+                    task.put("date", date);
+                    date.put("attrId", Attributes.DATE);
+                    DBAttribute dd = obj.getAttributeById(Attributes.DATE);
+                    if (dd != null) {
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        date.put("value", dateFormat.format(dd.getTimestampValue()));
+                    } else {
+                        date.put("value", "");
+                    }
+                }
+                List campaigns = new ArrayList();
+                templateParams.put("campaigns", campaigns);
+                List<DBObject> camps = TempHelper.getCampaignsByUser(getUser());
+                Collections.sort(camps, new Comparator<DBObject>() {
+                    @Override
+                    public int compare(DBObject o1, DBObject o2) {
+                        Timestamp timestamp1 = o1.getAttributeById(Attributes.CREATED_WHEN).getTimestampValue();
+                        Timestamp timestamp2 = o2.getAttributeById(Attributes.CREATED_WHEN).getTimestampValue();
+                        return timestamp1.compareTo(timestamp2);
+                    }
+                });
+                for (DBObject obj: camps) {
+                    DBAttribute enabled = obj.getAttributeById(Attributes.ENABLED);
+                    if (enabled != null && !enabled.getBooleanValue()) continue;
+                    Map campaign = new HashMap();
+                    campaigns.add(campaign);
+                    campaign.put("id", obj.getId().toString());
                     Map name = new HashMap();
                     campaign.put("name", name);
                     name.put("attrId", Attributes.NAME);
-                    name.put("value", obj.getAttributeById(Attributes.NAME).getTextValue());
+                    attr = obj.getAttributeById(Attributes.NAME);
+                    if (attr != null) {
+                        name.put("value", attr.getTextValue());
+                    } else {
+                        name.put("value", "");
+                    }
                     Map address = new HashMap();
                     campaign.put("address", address);
-                    name.put("attrId", Attributes.ADDRESS);
-                    name.put("value", obj.getAttributeById(Attributes.ADDRESS).getTextValue());
+                    address.put("attrId", Attributes.ADDRESS);
+                    attr = obj.getAttributeById(Attributes.ADDRESS);
+                    if (attr != null) {
+                        address.put("value", attr.getTextValue());
+                    } else {
+                        address.put("value", "");
+                    }
                     Map mapImg = new HashMap();
                     campaign.put("mapImg", mapImg);
-                    name.put("attrId", Attributes.MAP);
-                    name.put("value", obj.getAttributeById(Attributes.MAP).getTextValue());
+                    mapImg.put("attrId", Attributes.MAP);
+                    attr = obj.getAttributeById(Attributes.MAP);
+                    if (attr != null) {
+                        mapImg.put("value", attr.getTextValue());
+                    } else {
+                        mapImg.put("value", "");
+                    }
                     Map km = new HashMap();
                     campaign.put("km", km);
-                    name.put("attrId", Attributes.KM);
-                    name.put("value", obj.getAttributeById(Attributes.KM).getTextValue());
+                    km.put("attrId", Attributes.KM);
+                    attr = obj.getAttributeById(Attributes.KM);
+                    if (attr != null) {
+                        km.put("value", attr.getTextValue());
+                    } else {
+                        km.put("value", "");
+                    }
                     Map site = new HashMap();
                     campaign.put("site", site);
-                    site.put("value", obj.getAttributeById(Attributes.SITE).getTextValue());
                     site.put("attrId", Attributes.SITE);
-//                    Map source = new HashMap();
-//                    campaign.put("source", source);
-//                    source.put("attrId", Attributes.SOURCE);
-//                    DBAttribute src = obj.getAttributeById(Attributes.SOURCE);
-//                    if (src != null) {
-//                        source.put("value", src.getTextValue());
-//                    } else {
-//                        source.put("value", "");
-//                    }
+                    attr = obj.getAttributeById(Attributes.SITE);
+                    if (attr != null) {
+                        site.put("value", attr.getTextValue());
+                    } else {
+                        site.put("value", "");
+                    }
                     Map contacts = new HashMap();
                     campaign.put("contacts", contacts);
                     contacts.put("attrId", Attributes.CONTACTS);
                     DBAttribute cont = obj.getAttributeById(Attributes.CONTACTS);
+                    List conts = new ArrayList();
+                    contacts.put("values", conts);
                     if (cont != null) {
-                        contacts.put("value", cont.getTextValue());
-                    } else {
-                        contacts.put("value", "");
+                        String con = cont.getTextValue();
+                        //add  to conts
                     }
-//                    Map phone = new HashMap();
-//                    campaign.put("phone", phone);
-//                    phone.put("attrId", Attributes.PHONE);
-//
-//                    DBAttribute tel = obj.getAttributeById(Attributes.PHONE);
-//                    if (tel != null) {
-//                        phone.put("value", tel.getTextValue());
-//                    } else {
-//                        phone.put("value", "");
-//                    }
-//                    Map addNbr = new HashMap();
-//                    campaign.put("addNbr", addNbr);
-//                    addNbr.put("attrId", Attributes.ADDITIONAL_NUMBER);
-//                    DBAttribute addNumber = obj.getAttributeById(Attributes.ADDITIONAL_NUMBER);
-//                    if (addNumber != null) {
-//                        addNbr.put("value", addNumber.getTextValue());
-//                    } else {
-//                        addNbr.put("value", "");
-//                    }
-//                    Map result = new HashMap();
-//                    campaign.put("result", result);
-//                    result.put("attrId", Attributes.CALL_RESULTS);
-//                    List<DBAttribute> results = obj.getAttributesById(Attributes.CALL_RESULTS);
-//                    if (!results.isEmpty()) {
-//                        Collections.sort(results, new Comparator<DBAttribute>() {
-//                            @Override
-//                            public int compare(DBAttribute o1, DBAttribute o2) {
-//                                return -o1.getIdValue().compareTo(o2.getIdValue());
-//                            }
-//                        });
-//                        DBObject res = ObjectCache.getObject(results.get(0).getIdValue());
-//                        if (res != null) {
-//                            result.put("value", res.getAttributeById(Attributes.COMMENT).getTextValue());
-//                        }
-//                    } else {
-//                        result.put("value", "");
-//                    }
-//                    Map reason = new HashMap();
-//                    campaign.put("reason", reason);
-//                    reason.put("attrId", Attributes.CALL_REASON);
-//                    DBAttribute reas = obj.getAttributeById(Attributes.CALL_REASON);
-//                    if (reas != null) {
-//                        reason.put("value", reas.getTextValue());
-//                    } else {
-//                        reason.put("value", "");
-//                    }
-//                    Map date = new HashMap();
-//                    campaign.put("date", date);
-//                    date.put("attrId", Attributes.CALL_DATE);
-//                    DBAttribute dd = obj.getAttributeById(Attributes.CALL_DATE);
-//                    if (dd != null) {
-//                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//                        date.put("value", dateFormat.format(dd.getTimestampValue()));
-//                    } else {
-//                        date.put("value", "");
-//                    }
+
                 }
+
 
             }
         };
