@@ -463,7 +463,7 @@ public class DBHelper {
                     StringBuilder values = new StringBuilder();
                     List list = params.get(attrId);
                     for (int i = 0; i < list.size(); ++i) {
-                        if (list.get(i).equals("now()")) {
+                        if ("now()".equals(list.get(i))) {
                             values.append((i>0?",":"")+"("+objId+","+attrId.toString()+",now())");
                         } else {
                             values.append((i>0?",":"")+"("+objId+","+attrId.toString()+",?)");

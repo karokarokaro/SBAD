@@ -9,6 +9,7 @@ import core.database.DBObject;
 import core.database.ObjectTypes;
 import core.exceptions.RedirectException;
 import core.helpers.DBHelper;
+import core.helpers.FileHelper;
 import core.helpers.TempHelper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +58,8 @@ public class ActionPage2 extends JSONPage {
     protected String paramKm;
     protected String paramDateText;
     protected String paramBillNbr;
-    
+    protected Map<String, String> multiParams;
+
 
     public ActionPage2(HttpServletRequest request, HttpServletResponse response) {
         super(request, response);
@@ -68,6 +70,11 @@ public class ActionPage2 extends JSONPage {
         if (getUser() == null) throw new RedirectException("/crm/login.jsp");
     }
     protected void executeAdd() throws Exception {
+        paramName = multiParams.get("name");
+        paramAddress = multiParams.get("address");
+        paramScheme = multiParams.get("scheme");
+        paramKm = multiParams.get("km");
+        paramContacts = multiParams.get("contacts");
         Map<BigInteger, List> params = new HashMap<BigInteger, List>();
         List vals;
         vals = new ArrayList();
@@ -179,9 +186,9 @@ public class ActionPage2 extends JSONPage {
                 Attributes.PHONE.equals(paramAttrId) ||
                 Attributes.COMMENT.equals(paramAttrId) ||
                 Attributes.BILL_NBR.equals(paramAttrId) ||
+                Attributes.MAP.equals(paramAttrId) ||
                 Attributes.ADDRESS.equals(paramAttrId) ||
                 Attributes.DATE_TEXT.equals(paramAttrId) ||
-                Attributes.MAP.equals(paramAttrId) ||
                 Attributes.KM.equals(paramAttrId) ||
                 Attributes.FIO.equals(paramAttrId) ||
                 Attributes.ADDITIONAL_NUMBER.equals(paramAttrId) ||
@@ -345,11 +352,14 @@ public class ActionPage2 extends JSONPage {
         paramManagerId = request.getParameter("managerId");
         paramFio = request.getParameter("fio");
         paramAddress = request.getParameter("address");
-        paramScheme = request.getParameter("scheme");
         paramKm = request.getParameter("km");
         paramDateText = request.getParameter("dateText");
         paramBillNbr = request.getParameter("billNbr");
-
+        multiParams = FileHelper.processMultipartRequest(request);
+        if (multiParams != null && multiParams.containsKey("act")) {
+            paramAct = multiParams.get("act");
+            paramValue = multiParams.get("value");
+        }
     }
 
 }

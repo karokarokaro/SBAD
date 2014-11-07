@@ -98,6 +98,32 @@
         </div>
     </form>
 </div>
+<div id="karEditablePopupFile" class="modal hide fade in" tabindex="-1" data-width="760">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3></h3>
+    </div>
+    <form role="form" enctype="multipart/form-data">
+        <div class="modal-body">
+            <div class="row-fluid">
+                <table class="karEditableTable table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input type="file" name="value" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="error"><p class="help-block"></p></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn okButton btn-success">Ок</button>
+            <button type="button" data-dismiss="modal" class="btn btn-default">Отмена</button>
+        </div>
+    </form>
+</div>
 <div id="deleteTaskPopup" class="modal hide fade in" tabindex="-1" data-width="760">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -185,7 +211,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Добавить компанию</h3>
     </div>
-    <form role="form" action="/crm/action.jsp" method="post" id="addForm">
+    <form role="form" action="/crm/action.jsp" method="post" id="addForm" enctype="multipart/form-data">
         <input name="act" type="hidden" value="addCamp"/>
         <div class="modal-body">
             <div class="row-fluid">
@@ -287,7 +313,13 @@
                             <a href="#" attr-id="${campaign.contacts.attrId}" data-type="contacts" data-pk="${campaign.id}" data-value="${campaign.contacts.value}" data-title="Введите контактные данные" class="kareditable">${campaign.contacts.value}</a>
                         </td>
                         <td class="addressCol"><a href="#" data-type="text" data-pk="${campaign.id}" attr-id="${campaign.address.attrId}" data-title="Введите адрес" class="editable editable-click">${campaign.address.value}</a></td>
-                        <td class="schemeCol"><a href="#" data-type="text" data-pk="${campaign.id}" attr-id="${campaign.scheme.attrId}" data-title="Прикрепите изображение" class="editable editable-click">${campaign.scheme.value}</a></td>
+                        <td class="schemeCol"><a href="#" data-type="file" data-pk="${campaign.id}" attr-id="${campaign.scheme.attrId}" data-value="${campaign.scheme.value}" data-title="Прикрепите изображение" class="kareditable">
+                            <#if campaign.scheme.uploaded>
+                                Загружено
+                                <#else>
+                                    Не загружено
+                            </#if>
+                        </a></td>
                         <td class="kmCol"><a href="#" data-type="text" data-pk="${campaign.id}" attr-id="${campaign.km.attrId}" data-title="Введите километраж" class="editable editable-click">${campaign.km.value}</a></td>
                     </tr>
                 </#list>

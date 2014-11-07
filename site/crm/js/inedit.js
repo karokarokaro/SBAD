@@ -68,6 +68,32 @@ addInitFunction(function(){
             error: onErrorResponse
         });
     });
+    $.each($('.kareditable[attr-id="50"]'), function(key, value) {
+        var pk = $(value).attr("data-pk");
+        var id = "kareditable-"+pk+"-50"
+        $(value).attr("id", id);
+        initKarEditable(id, {
+            url: editableURL,
+            type: "file",
+            emptytext: 'Пусто',
+            params: function(params) {
+                params.pk = pk;
+                params.attrId = 50;
+                params.act = "updateCamp";
+                return params;
+            },
+            display: function(value) {
+                if (typeof value != "undefined" && value != "" && value != "Не загружено") {
+                    return "Загружено";
+                } else {
+                    return "Не загружено";
+                }
+            },
+            title: "Прикрепите изображение",
+            success: onSuccessResponse,
+            error: onErrorResponse
+        });
+    });
     $.each($('.kareditable[attr-id="37"]'), function(key, value) {
         var pk = $(value).attr("data-pk");
         var id = "kareditable-"+pk+"-37"

@@ -23,7 +23,8 @@ function parseForm($form){
 KarEditable = {
     clickHandlers: {
         "combodate": prepareAndShowKarEditableComboDate,
-        "contacts" : prepareAndShowKarEditableContacts
+        "contacts" : prepareAndShowKarEditableContacts,
+        "file" : prepareAndShowKarEditableFile
     },
     items: {}
 };
@@ -54,7 +55,7 @@ function stopKarEditables() {
         $karEditable.removeClass("karEditableEmpty");
         $karEditable.unbind('click');
         if (editableItem.value.length == 0) {
-            $karEditable.html("");
+            $karEditable.html(editableItem.display(""));
         } else {
             $karEditable.html(editableItem.display(editableItem.value));
         }
@@ -62,11 +63,17 @@ function stopKarEditables() {
 }
 function initKarEditableOkButton($popup, getValue) {
     $popup.find(".okButton").click(function() {
-        var value = getValue($popup);
-        $popup.find("form").find('input[name="value"]').val(value);
+        var value;
+        if (typeof getValue != "undefined") {
+            value = getValue($popup);
+            $popup.find("form").find('input[name="value"]').val(value);
+        } else {
+            value = $popup.find("form").find('input[name="value"]').val();
+        }
         if (typeof KarEditable.active != "undefined") {
             var karedit = KarEditable.active;
             var params = parseForm($popup.find("form"));
+            params.value = params.value || value;
             var value = params.value;
             if (typeof karedit.params != "undefined") {
                 params = karedit.params(params);
@@ -74,6 +81,7 @@ function initKarEditableOkButton($popup, getValue) {
             $.ajax({
                 type: "POST",
                 url: karedit.url,
+                mimeType: "multipart/form-data",
                 data: params,
                 dataType: "json",
                 success: function(json) {
@@ -105,7 +113,11 @@ function initKarEditableOkButton($popup, getValue) {
 function initKarEditable(id, params) {
     params.id = id;
     if ($("#"+id).text().trim().length > 0) {
-        params.value = $("#"+id).text().trim();
+        if (typeof $("#"+id).attr("data-value") != "undefined") {
+            params.value = $("#"+id).attr("data-value");
+        } else {
+            params.value = $("#"+id).text().trim();
+        }
     } else {
         params.value = "";
     }
@@ -202,6 +214,11 @@ function prepareAndShowKarEditableContacts(params) {
     }
     $popup.modal("show");
 }
+function prepareAndShowKarEditableFile(params) {
+    var $popup = $('#karEditablePopupFile');
+    prepareKarEditablePopupHeader($popup, params);
+    $popup.modal("show");
+}
 addInitFunction(function() {
     initKarEditableOkButton($('#karEditablePopupDate'), function($popup) {
         var date = $popup.find("form").find('input[name="date"]').val();
@@ -211,4 +228,5 @@ addInitFunction(function() {
     initKarEditableOkButton($('#karEditablePopupContacts'), function($popup) {
         return getContactsValueFromHolder($popup.find(".contactsHolder"));
     });
+    initKarEditableOkButton($('#karEditablePopupFile'));
 });

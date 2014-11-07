@@ -82,10 +82,13 @@ public class CampEditorPage extends HtmlPage {
                     Map mapImg = new HashMap();
                     campaign.put("scheme", mapImg);
                     mapImg.put("attrId", Attributes.MAP);
-                    if (obj.getAttributeById(Attributes.MAP) != null) {
+                    if (obj.getAttributeById(Attributes.MAP) != null &&
+                            obj.getAttributeById(Attributes.MAP).getTextValue().length() > 0) {
                         mapImg.put("value", obj.getAttributeById(Attributes.MAP).getTextValue());
+                        mapImg.put("uploaded", true);
                     } else {
                         mapImg.put("value", "");
+                        mapImg.put("uploaded", false);
                     }
                     Map km = new HashMap();
                     campaign.put("km", km);
