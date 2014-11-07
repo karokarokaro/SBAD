@@ -1,0 +1,312 @@
+<div id="wrapper">
+
+<!-- Sidebar -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand">Редактор компаний</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+
+        <ul class="nav navbar-nav navbar-right navbar-user">
+            <li class="dropdown user-dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list-alt"></i> Страницы<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <!--li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                    <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+                    <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                    <li class="divider"></li-->
+                    <li><a href="/crm/tasks.jsp"><i class="fa fa-check-square-o"></i> Редактор заданий</a></li>
+                    <li><a><i class="fa fa-users"></i> Редактор компаний</a></li>
+                </ul>
+            </li>
+            <li class="dropdown user-dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> ${user.login}<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <!--li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                    <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+                    <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                    <li class="divider"></li-->
+                    <li><a href="/crm/login.jsp?act=logout"><i class="fa fa-power-off"></i> Выйти</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>
+
+<div id="page-wrapper">
+<div id="deletePopup" class="modal hide fade in" tabindex="-1" data-width="760">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Подтвердите удаление следующих компаний</h3>
+    </div>
+    <form role="form" action="/crm/action.jsp" method="post" id="deleteForm">
+        <input type="hidden" name="act" value="deleteCamp"/>
+        <div class="modal-body">
+            <div class="row-fluid">
+                <table class="deleteForm table table-striped">
+                    <tbody>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Ок</button>
+            <button type="button" data-dismiss="modal" class="btn btn-default">Отмена</button>
+        </div>
+    </form>
+</div>
+<div id="karEditablePopupContacts" class="modal hide fade in" tabindex="-1" data-width="760">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Введите контактную информацию</h3>
+    </div>
+    <form role="form">
+        <input type="hidden" name="value"/>
+        <div class="modal-body">
+            <div class="row-fluid">
+                <table class="karEditableTable table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="contactsHolder">
+                                <table>
+
+                                </table>
+                                <div class="btn btn-success btn-sm" onclick="contactsAddLine($(this).closest('.contactsHolder'))"><i class="fa fa-plus"></i></div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="error"><p class="help-block"></p></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn okButton btn-success">Ок</button>
+            <button type="button" data-dismiss="modal" class="btn btn-default">Отмена</button>
+        </div>
+    </form>
+</div>
+<div id="deleteTaskPopup" class="modal hide fade in" tabindex="-1" data-width="760">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Подтвердите удаление следующих задание</h3>
+    </div>
+    <form role="form" action="/crm/action.jsp" method="post" id="deleteTaskForm">
+        <input type="hidden" name="act" value="deleteTask"/>
+        <div class="modal-body">
+            <div class="row-fluid">
+                <table class="deleteForm table table-striped">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Ок</button>
+            <button type="button" data-dismiss="modal" class="btn btn-default">Отмена</button>
+        </div>
+    </form>
+</div>
+<div id="addTaskPopup" class="modal hide fade in" tabindex="-1" data-width="760">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Добавление задания</h3>
+    </div>
+    <form role="form" action="/crm/action.jsp" method="post" id="addTaskForm">
+        <input type="hidden" name="act" value="addTask"/>
+        <div class="modal-body">
+            <div class="row-fluid">
+                <table class="addTaskForm table table-striped">
+                    <tbody>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Ок</button>
+            <button type="button" data-dismiss="modal" class="btn btn-default">Отмена</button>
+        </div>
+    </form>
+</div>
+<div id="karEditablePopupDate" class="modal hide fade in" tabindex="-1" data-width="760">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Введите дату и время</h3>
+    </div>
+    <form role="form">
+        <input type="hidden" name="value"/>
+        <div class="modal-body">
+            <div class="row-fluid">
+                <table class="karEditableTable table table-striped">
+                    <tbody>
+                    <tr>
+                        <td class="labelCol">
+                            <label>Дата следующего звонка</label>
+                        </td>
+                        <td>
+                            <input class="form-control" name="date"/>
+                        </td>
+                        <td>
+                            <select name="minute" class="form-control">
+                                <option value="00" selected>00</option><option value="05">05</option><option value="10">10</option><option value="15">15</option>
+                                <option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="35">35</option>
+                                <option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="error"><p class="help-block"></p></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn okButton btn-success">Ок</button>
+            <button type="button" data-dismiss="modal" class="btn btn-default">Отмена</button>
+        </div>
+    </form>
+</div>
+<div id="addPopup" class="modal hide fade in" tabindex="-1" data-width="760">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Добавить компанию</h3>
+    </div>
+    <form role="form" action="/crm/action.jsp" method="post" id="addForm">
+        <input name="act" type="hidden" value="addCamp"/>
+        <div class="modal-body">
+            <div class="row-fluid">
+                <table class="addForm table table-striped">
+                    <tbody>
+                    <tr>
+                        <td class="labelCol">
+                            <label>Название <span class="font-red">*</span></label>
+                        </td>
+                        <td colspan="2">
+                            <input class="form-control" name="name" type="text" required="" placeholder=""/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">
+                            <label>Контакты</label>
+                        </td>
+                        <td colspan="2">
+                            <div class="contactsHolder">
+                                <input name="contacts" type="hidden" class="contsInput" />
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <input class="form-control phone" type="text" placeholder="Телефон" />
+                                        </td>
+                                        <td>
+                                            <input class="form-control name" type="text" placeholder="ФИО" />
+                                        </td>
+                                        <td>
+                                            <div class="btn btn-danger btn-sm" onclick="$(this).closest('tr').remove()"><i class="fa fa-minus"></i></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="btn btn-success btn-sm" onclick="contactsAddLine($(this).closest('.contactsHolder'))"><i class="fa fa-plus"></i></div>
+                            </div>
+
+                            <p class="help-block"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">
+                            <label>Адрес</label>
+                        </td>
+                        <td colspan="2">
+                            <input class="form-control" name="address" type="text" placeholder="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">
+                            <label>Схема</label>
+                        </td>
+                        <td colspan="2">
+                            <input class="form-control" name="scheme" type="file" placeholder="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">
+                            <label>Километраж</label>
+                        </td>
+                        <td colspan="2">
+                            <input class="form-control" name="km" type="text" placeholder="">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success" onclick="$('#addPopup .contsInput').val(getContactsValueFromHolder($('#addPopup .contactsHolder')))">Ок</button>
+            <button type="button" data-dismiss="modal" class="btn btn-default">Отмена</button>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <h2>Компании</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover campTable">
+                <thead>
+                <tr>
+                    <th class="seqCol">&nbsp;</th>
+                    <th class="checkCol">&nbsp;</th>
+                    <th class="nameCol">Название компании</th>
+                    <th class="contactsCol">Контактные лица</th>
+                    <th class="addressCol">Адрес</th>
+                    <th class="schemeCol">Схема</th>
+                    <th class="kmCol">КМ</th>
+                </tr>
+                </thead>
+                <tbody>
+                <#list campaigns as campaign>
+                    <tr obj-id="${campaign.id}">
+                        <td class="seqCol">${campaign.seqNumber}.</td>
+                        <td class="checkCol">
+                            <input type="checkbox"/>
+                        </td>
+                        <td class="nameCol"><a href="#" data-type="text" data-pk="${campaign.id}" attr-id="${campaign.name.attrId}" data-title="Введите имя компании" class="editable editable-click">${campaign.name.value}</a></td>
+                        <td class="contactsCol">
+                            <a href="#" attr-id="${campaign.contacts.attrId}" data-type="contacts" data-pk="${campaign.id}" data-value="${campaign.contacts.value}" data-title="Введите контактные данные" class="kareditable">${campaign.contacts.value}</a>
+                        </td>
+                        <td class="addressCol"><a href="#" data-type="text" data-pk="${campaign.id}" attr-id="${campaign.address.attrId}" data-title="Введите адрес" class="editable editable-click">${campaign.address.value}</a></td>
+                        <td class="schemeCol"><a href="#" data-type="text" data-pk="${campaign.id}" attr-id="${campaign.scheme.attrId}" data-title="Прикрепите изображение" class="editable editable-click">${campaign.scheme.value}</a></td>
+                        <td class="kmCol"><a href="#" data-type="text" data-pk="${campaign.id}" attr-id="${campaign.km.attrId}" data-title="Введите километраж" class="editable editable-click">${campaign.km.value}</a></td>
+                    </tr>
+                </#list>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row bottomToolbar">
+    <div class="col-lg-12">
+        <div class="btn-group inedit-control-group btn-group-xs">
+            <button id="inedit-disable" disabled class="btn btn-success" data-toggle="button">Принять</button>
+            <button id="inedit-enable" class="btn btn-danger" data-toggle="button">Редактировать</button>
+        </div>
+        <br/>
+        <a type="button" class="btn btn-success addButton">Добавить компанию</a>
+        <a type="button" class="btn btn-danger deleteButton">Удалить компанию</a>
+    </div>
+</div>
+</div><!-- /#page-wrapper -->
+
+</div><!-- /#wrapper -->

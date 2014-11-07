@@ -43,6 +43,7 @@ public class MainPage extends HtmlPage {
                 templateParams.put("user", user);
                 user.put("login", getUser().getLogin());
                 user.put("id", getUser().getId().toString());
+                user.put("fullName", getUser().getFullName());
                 user.put("isAdmin", getUser().isAdmin());
                 Map campTypes = new HashMap();
                 templateParams.put("campTypes", campTypes);

@@ -13,18 +13,12 @@ public class RouterPage extends AbstractPage {
     }
 
     protected void authorize() throws Exception {
-        if (getUser() == null) throw new RedirectException("/login.jsp");
+        if (getUser() == null) throw new RedirectException("/crm/login.jsp");
     }
 
     protected void execute() throws Exception {
-        AbstractPage page = null;
-        if (UserRoles.Manager.equals(getUser().getRole())) page = new CampEditorPage(request, response);
-        if (UserRoles.Buyer.equals(getUser().getRole())) page = new CampEditorPage(request, response);
-
-        if (page != null) {
-            page.executeRequest();
-        } else {
-            throw new RedirectException("/crm/login.jsp");
-        }
+        if (UserRoles.Manager.equals(getUser().getRole())) throw new RedirectException("/crm/tasks.jsp");
+        if (UserRoles.Buyer.equals(getUser().getRole())) throw new RedirectException("/crm/tasks.jsp");
+        throw new RedirectException("/crm/login.jsp");
     }
 }

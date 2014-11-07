@@ -52,6 +52,7 @@ public class LoginPage extends HtmlPage {
         TemplateRenderer loginBody = new TemplateRenderer(request, response, new BigInteger("1413")) {
             protected void mapTemplateModel() throws Exception {
                 templateParams.put("message", message != null ? message : "");
+                templateParams.put("formUrl", "/login.jsp");
             }
         };
         out.append(loginBody.render());
@@ -74,8 +75,14 @@ public class LoginPage extends HtmlPage {
                     user.setLogin(paramLogin);
                     user.setPassHash(HashHelper.getPasswordHash(paramPassword));
                     user.setLoginTime(new Timestamp(1));
+                    DBAttribute attr;
+                    attr = userDB.getAttributeById(Attributes.NAME);
+                    if (attr!=null) user.setName(attr.getTextValue());
+                    attr = userDB.getAttributeById(Attributes.SURNAME);
+                    if (attr!=null) user.setSurname(attr.getTextValue());
+                    attr = userDB.getAttributeById(Attributes.PATR_NAME);
+                    if (attr!=null) user.setPatrname(attr.getTextValue());
                     setUser(user);
-                    if (true/*old user*/)
                     throw new RedirectException("/");
                 }
             }

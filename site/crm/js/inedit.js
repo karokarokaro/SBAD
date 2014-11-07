@@ -12,29 +12,29 @@ function onSuccessResponse(response, newValue) {
             return "Ошибка при сохранении данных. ";
         }
     } else {
-        if (response["attr-id"] == 40) {
-            var objId = response["obj-id"];
-            var $tr = $('tr[obj-id="'+objId+'"]');
-            var now = new Date();
-            var tomorrow = new Date();
-            tomorrow.setHours(23);
-            tomorrow.setMinutes(59);
-            var newDate = new Date(newValue);
-            if (newDate < now) {
-                $tr.removeClass("success");
-                $tr.addClass("danger");
-            } else if (newDate < tomorrow) {
-                $tr.removeClass("danger");
-                $tr.addClass("success");
-            } else {
-                $tr.removeClass("danger");
-                $tr.removeClass("success");
-            }
-        }
+//        if (response["attr-id"] == 40) {
+//            var objId = response["obj-id"];
+//            var $tr = $('tr[obj-id="'+objId+'"]');
+//            var now = new Date();
+//            var tomorrow = new Date();
+//            tomorrow.setHours(23);
+//            tomorrow.setMinutes(59);
+//            var newDate = new Date(newValue);
+//            if (newDate < now) {
+//                $tr.removeClass("success");
+//                $tr.addClass("danger");
+//            } else if (newDate < tomorrow) {
+//                $tr.removeClass("danger");
+//                $tr.addClass("success");
+//            } else {
+//                $tr.removeClass("danger");
+//                $tr.removeClass("success");
+//            }
+//        }
     }
 }
 addInitFunction(function(){
-    var editableURL = "/action.jsp";
+    var editableURL = "/crm/action.jsp";
     $('.editable[attr-id="45"]').editable({
         url: editableURL,
         ajaxOptions: {
@@ -68,6 +68,26 @@ addInitFunction(function(){
             error: onErrorResponse
         });
     });
+    $.each($('.kareditable[attr-id="37"]'), function(key, value) {
+        var pk = $(value).attr("data-pk");
+        var id = "kareditable-"+pk+"-37"
+        $(value).attr("id", id);
+        initKarEditable(id, {
+            url: editableURL,
+            type: "contacts",
+            emptytext: 'Пусто',
+            params: function(params) {
+                params.pk = pk;
+                params.attrId = 37;
+                params.act = "updateTask";
+                return params;
+            },
+            title: "Введите контактную информацию",
+            display: getDisplayContacts,
+            success: onSuccessResponse,
+            error: onErrorResponse
+        });
+    });
 
 //    $('.editable[attr-id="40"]').editable({
 //        url: editableURL,
@@ -87,18 +107,81 @@ addInitFunction(function(){
 //        error: onErrorResponse
 //    });
 
-    $('.editable[attr-id="37"]').editable({
+    $('.editable[attr-id="53"]').editable({
         url: editableURL,
         ajaxOptions: {
             dataType: 'json'
         },
         emptytext: 'Пусто',
-        inputclass: 'contactsInput',
         showbuttons: 'bottom',
         placement: 'bottom',
         params: function(params) {
-            params.attrId = 37;
-            params.act = "updateCamp";
+            params.attrId = 53;
+            params.act = "updateTask";
+            return params;
+        },
+        success: onSuccessResponse,
+        error: onErrorResponse
+    });
+    $('.editable[attr-id="44"]').editable({
+        url: editableURL,
+        ajaxOptions: {
+            dataType: 'json'
+        },
+        emptytext: 'Пусто',
+        showbuttons: 'bottom',
+        placement: 'bottom',
+        params: function(params) {
+            params.attrId = 44;
+            params.act = "updateTask";
+            return params;
+        },
+        success: onSuccessResponse,
+        error: onErrorResponse
+    });
+    $('.editable[attr-id="56"]').editable({
+        url: editableURL,
+        ajaxOptions: {
+            dataType: 'json'
+        },
+        emptytext: 'Пусто',
+        showbuttons: 'bottom',
+        placement: 'bottom',
+        params: function(params) {
+            params.attrId = 56;
+            params.act = "updateTask";
+            return params;
+        },
+        success: onSuccessResponse,
+        error: onErrorResponse
+    });
+    $('.editable[attr-id="49"]').editable({
+        url: editableURL,
+        ajaxOptions: {
+            dataType: 'json'
+        },
+        emptytext: 'Пусто',
+        showbuttons: 'bottom',
+        placement: 'bottom',
+        params: function(params) {
+            params.attrId = 49;
+            params.act = "updateTask";
+            return params;
+        },
+        success: onSuccessResponse,
+        error: onErrorResponse
+    });
+    $('.editable[attr-id="51"]').editable({
+        url: editableURL,
+        ajaxOptions: {
+            dataType: 'json'
+        },
+        emptytext: 'Пусто',
+        showbuttons: 'bottom',
+        placement: 'bottom',
+        params: function(params) {
+            params.attrId = 51;
+            params.act = "updateTask";
             return params;
         },
         success: onSuccessResponse,

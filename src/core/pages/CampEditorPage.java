@@ -37,33 +37,19 @@ public class CampEditorPage extends HtmlPage {
 
 
     protected void renderBody() throws Exception {
-        TemplateRenderer body = new TemplateRenderer(request, response, new BigInteger("1415")) {
+        TemplateRenderer body = new TemplateRenderer(request, response, new BigInteger("4786")) {
             protected void mapTemplateModel() throws Exception {
                 Map user = new HashMap<String, String>();
                 templateParams.put("user", user);
                 user.put("login", getUser().getLogin());
                 user.put("id", getUser().getId().toString());
+                user.put("fullName", getUser().getFullName());
                 user.put("isAdmin", getUser().isAdmin());
                 user.put("isGuest", getUser().isGuest());
                 user.put("roleDescr", getUser().getRole().getDescription());
-//                Map campTypes = new HashMap();
-//                templateParams.put("campTypes", campTypes);
-//                campTypes.put("oao", CampTypes.OAO.ordinal());
-//                campTypes.put("ooo", CampTypes.OOO.ordinal());
-//                campTypes.put("ip", CampTypes.IP.ordinal());
                 List campaigns = new ArrayList();
-//                List managers = new ArrayList();
-//                templateParams.put("managers", managers);
-//                List<DBObject> managerList = TempHelper.getManagers();
-//                for (DBObject manag: managerList) {
-//                    if (manag.getId().equals(getUser().getId())) continue;
-//                    Map manager = new HashMap();
-//                    managers.add(manager);
-//                    manager.put("id", manag.getId().toString());
-//                    manager.put("name", manag.getAttributeById(Attributes.LOGIN).getTextValue());
-//                }
                 templateParams.put("campaigns", campaigns);
-                List<DBObject> camps = TempHelper.getCampaignsByUser(getUser());
+                List<DBObject> camps = TempHelper.getCampaigns2ByUser(getUser());
                 Collections.sort(camps, new Comparator<DBObject>() {
                     @Override
                     public int compare(DBObject o1, DBObject o2) {
@@ -81,52 +67,41 @@ public class CampEditorPage extends HtmlPage {
                     campaigns.add(campaign);
                     campaign.put("seqNumber", i);
                     campaign.put("id", obj.getId().toString());
-//                    DBAttribute callDate = obj.getAttributeById(Attributes.CALL_DATE);
-//                    String styleClass = "";
-//                    Calendar tomorrow = Calendar.getInstance();
-//                    if (callDate != null) {
-//                        if (!callDate.getTimestampValue().after(tomorrow.getTime())) {
-//                            styleClass = "danger";
-//                        } else {
-//                            tomorrow.set(Calendar.HOUR_OF_DAY, 23);
-//                            tomorrow.set(Calendar.MINUTE, 59);
-//                            if (!callDate.getTimestampValue().after(tomorrow.getTime())) {
-//                                styleClass = "success";
-//                            }
-//                        }
-//
-//                    }
-//                    campaign.put("styleClass", styleClass);
-//                    int typ = obj.getAttributeById(Attributes.TYPE).getIntValue();
-//                    campaign.put("type", (typ >= 0 && typ < 3) ? CampTypes.values()[typ].toString() : "");
                     Map name = new HashMap();
                     campaign.put("name", name);
                     name.put("attrId", Attributes.NAME);
                     name.put("value", obj.getAttributeById(Attributes.NAME).getTextValue());
                     Map address = new HashMap();
                     campaign.put("address", address);
-                    name.put("attrId", Attributes.ADDRESS);
-                    name.put("value", obj.getAttributeById(Attributes.ADDRESS).getTextValue());
+                    address.put("attrId", Attributes.ADDRESS);
+                    if (obj.getAttributeById(Attributes.ADDRESS) != null) {
+                        address.put("value", obj.getAttributeById(Attributes.ADDRESS).getTextValue());
+                    } else {
+                        address.put("value", "");
+                    }
                     Map mapImg = new HashMap();
-                    campaign.put("mapImg", mapImg);
-                    name.put("attrId", Attributes.MAP);
-                    name.put("value", obj.getAttributeById(Attributes.MAP).getTextValue());
+                    campaign.put("scheme", mapImg);
+                    mapImg.put("attrId", Attributes.MAP);
+                    if (obj.getAttributeById(Attributes.MAP) != null) {
+                        mapImg.put("value", obj.getAttributeById(Attributes.MAP).getTextValue());
+                    } else {
+                        mapImg.put("value", "");
+                    }
                     Map km = new HashMap();
                     campaign.put("km", km);
-                    name.put("attrId", Attributes.KM);
-                    name.put("value", obj.getAttributeById(Attributes.KM).getTextValue());
-                    Map site = new HashMap();
-                    campaign.put("site", site);
-                    site.put("value", obj.getAttributeById(Attributes.SITE).getTextValue());
-                    site.put("attrId", Attributes.SITE);
-//                    Map source = new HashMap();
-//                    campaign.put("source", source);
-//                    source.put("attrId", Attributes.SOURCE);
-//                    DBAttribute src = obj.getAttributeById(Attributes.SOURCE);
-//                    if (src != null) {
-//                        source.put("value", src.getTextValue());
+                    km.put("attrId", Attributes.KM);
+                    if (obj.getAttributeById(Attributes.KM) != null) {
+                        km.put("value", obj.getAttributeById(Attributes.KM).getTextValue());
+                    } else {
+                        km.put("value", "");
+                    }
+//                    Map fio = new HashMap();
+//                    campaign.put("fio", fio);
+//                    fio.put("attrId", Attributes.FIO);
+//                    if (obj.getAttributeById(Attributes.FIO) != null) {
+//                        fio.put("value", obj.getAttributeById(Attributes.FIO).getTextValue());
 //                    } else {
-//                        source.put("value", "");
+//                        fio.put("value", "");
 //                    }
                     Map contacts = new HashMap();
                     campaign.put("contacts", contacts);
@@ -137,62 +112,6 @@ public class CampEditorPage extends HtmlPage {
                     } else {
                         contacts.put("value", "");
                     }
-//                    Map phone = new HashMap();
-//                    campaign.put("phone", phone);
-//                    phone.put("attrId", Attributes.PHONE);
-//
-//                    DBAttribute tel = obj.getAttributeById(Attributes.PHONE);
-//                    if (tel != null) {
-//                        phone.put("value", tel.getTextValue());
-//                    } else {
-//                        phone.put("value", "");
-//                    }
-//                    Map addNbr = new HashMap();
-//                    campaign.put("addNbr", addNbr);
-//                    addNbr.put("attrId", Attributes.ADDITIONAL_NUMBER);
-//                    DBAttribute addNumber = obj.getAttributeById(Attributes.ADDITIONAL_NUMBER);
-//                    if (addNumber != null) {
-//                        addNbr.put("value", addNumber.getTextValue());
-//                    } else {
-//                        addNbr.put("value", "");
-//                    }
-//                    Map result = new HashMap();
-//                    campaign.put("result", result);
-//                    result.put("attrId", Attributes.CALL_RESULTS);
-//                    List<DBAttribute> results = obj.getAttributesById(Attributes.CALL_RESULTS);
-//                    if (!results.isEmpty()) {
-//                        Collections.sort(results, new Comparator<DBAttribute>() {
-//                            @Override
-//                            public int compare(DBAttribute o1, DBAttribute o2) {
-//                                return -o1.getIdValue().compareTo(o2.getIdValue());
-//                            }
-//                        });
-//                        DBObject res = ObjectCache.getObject(results.get(0).getIdValue());
-//                        if (res != null) {
-//                            result.put("value", res.getAttributeById(Attributes.COMMENT).getTextValue());
-//                        }
-//                    } else {
-//                        result.put("value", "");
-//                    }
-//                    Map reason = new HashMap();
-//                    campaign.put("reason", reason);
-//                    reason.put("attrId", Attributes.CALL_REASON);
-//                    DBAttribute reas = obj.getAttributeById(Attributes.CALL_REASON);
-//                    if (reas != null) {
-//                        reason.put("value", reas.getTextValue());
-//                    } else {
-//                        reason.put("value", "");
-//                    }
-//                    Map date = new HashMap();
-//                    campaign.put("date", date);
-//                    date.put("attrId", Attributes.CALL_DATE);
-//                    DBAttribute dd = obj.getAttributeById(Attributes.CALL_DATE);
-//                    if (dd != null) {
-//                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//                        date.put("value", dateFormat.format(dd.getTimestampValue()));
-//                    } else {
-//                        date.put("value", "");
-//                    }
                 }
 
             }

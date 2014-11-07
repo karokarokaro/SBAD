@@ -9,6 +9,39 @@ public class User {
     private String passHash;
     private Timestamp loginTime;
     private UserRoles role;
+    private String patrname;
+    private String name;
+    private String surname;
+
+    public String getPatrname() {
+        return patrname;
+    }
+
+    public void setPatrname(String patrname) {
+        this.patrname = patrname;
+    }
+
+    public String getFullName() {
+        return (surname!=null ? surname+" " : "") +
+                (name!=null ? name+" " : "") +
+                (patrname!=null ? patrname : "");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 
     public boolean isAdmin() {
         return UserRoles.Admin.equals(role);

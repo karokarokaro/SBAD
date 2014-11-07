@@ -104,6 +104,22 @@ addInitFunction(function(){
         success: onSuccessResponse,
         error: onErrorResponse
     });
+    $('.editable[attr-id="53"]').editable({
+        url: editableURL,
+        ajaxOptions: {
+            dataType: 'json'
+        },
+        emptytext: 'Пусто',
+        showbuttons: 'bottom',
+        placement: 'bottom',
+        params: function(params) {
+            params.attrId = 53;
+            params.act = "updateTask";
+            return params;
+        },
+        success: onSuccessResponse,
+        error: onErrorResponse
+    });
     $('.editable[attr-id="46"]').editable({
         url: editableURL,
         ajaxOptions: {

@@ -38,16 +38,37 @@ public class TaskEditorPage extends HtmlPage {
 
 
     protected void renderBody() throws Exception {
-        TemplateRenderer body = new TemplateRenderer(request, response, new BigInteger("1415")) {
+        TemplateRenderer body = new TemplateRenderer(request, response, new BigInteger("4784")) {
             protected void mapTemplateModel() throws Exception {
                 DBAttribute attr;
                 Map user = new HashMap<String, String>();
                 templateParams.put("user", user);
                 user.put("login", getUser().getLogin());
                 user.put("id", getUser().getId().toString());
+                user.put("fullName", getUser().getFullName());
                 user.put("isAdmin", getUser().isAdmin());
                 user.put("isGuest", getUser().isGuest());
                 user.put("roleDescr", getUser().getRole().getDescription());
+                List campaigns = new ArrayList();
+                templateParams.put("campaigns", campaigns);
+                List<DBObject> campObjects = TempHelper.getCampaigns2ByUser(getUser());
+                Collections.sort(campObjects, new Comparator<DBObject>() {
+                    @Override
+                    public int compare(DBObject o1, DBObject o2) {
+                        Timestamp timestamp1 = o1.getAttributeById(Attributes.CREATED_WHEN).getTimestampValue();
+                        Timestamp timestamp2 = o2.getAttributeById(Attributes.CREATED_WHEN).getTimestampValue();
+                        return timestamp1.compareTo(timestamp2);
+                    }
+                });
+                for (DBObject obj: campObjects) {
+                    DBAttribute enabled = obj.getAttributeById(Attributes.ENABLED);
+                    if (enabled != null && !enabled.getBooleanValue()) continue;
+                    Map camp = new HashMap();
+                    campaigns.add(camp);
+                    camp.put("id", obj.getId().toString());
+                    camp.put("name",obj.getAttributeById(Attributes.NAME).getTextValue());
+
+                }
                 List tasks = new ArrayList();
                 templateParams.put("tasks", tasks);
                 List<DBObject> taskObjects = TempHelper.getTasksByUser(getUser());
@@ -63,13 +84,18 @@ public class TaskEditorPage extends HtmlPage {
                 for (DBObject obj: taskObjects) {
                     DBAttribute enabled = obj.getAttributeById(Attributes.ENABLED);
                     if (enabled != null && !enabled.getBooleanValue()) continue;
+                    ObjectCache.addIdToLoad(obj.getAttributeById(Attributes.CAMP_ID).getIdValue());
+                }
+                for (DBObject obj: taskObjects) {
+                    DBAttribute enabled = obj.getAttributeById(Attributes.ENABLED);
+                    if (enabled != null && !enabled.getBooleanValue()) continue;
                     ++i;
                     Map task = new HashMap();
                     tasks.add(task);
                     task.put("seqNumber", i);
                     task.put("id", obj.getId().toString());
                     Map comment = new HashMap();
-                    task.put("comment", comment);
+                    task.put("comments", comment);
                     comment.put("attrId", Attributes.COMMENT);
                     attr = obj.getAttributeById(Attributes.COMMENT);
                     if (attr != null) {
@@ -77,93 +103,78 @@ public class TaskEditorPage extends HtmlPage {
                     } else {
                         comment.put("value", "");
                     }
+                    Map billNbr = new HashMap();
+                    task.put("billNbr", billNbr);
+                    billNbr.put("attrId", Attributes.BILL_NBR);
+                    attr = obj.getAttributeById(Attributes.BILL_NBR);
+                    if (attr != null) {
+                        billNbr.put("value", attr.getTextValue());
+                    } else {
+                        billNbr.put("value", "");
+                    }
                     Map date = new HashMap();
-                    task.put("date", date);
-                    date.put("attrId", Attributes.DATE);
-                    DBAttribute dd = obj.getAttributeById(Attributes.DATE);
-                    if (dd != null) {
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                        date.put("value", dateFormat.format(dd.getTimestampValue()));
+                    task.put("dateText", date);
+                    date.put("attrId", Attributes.DATE_TEXT);
+                    attr = obj.getAttributeById(Attributes.DATE_TEXT);
+                    if (attr != null) {
+                        date.put("value", attr.getTextValue());
                     } else {
                         date.put("value", "");
                     }
-                }
-                List campaigns = new ArrayList();
-                templateParams.put("campaigns", campaigns);
-                List<DBObject> camps = TempHelper.getCampaignsByUser(getUser());
-                Collections.sort(camps, new Comparator<DBObject>() {
-                    @Override
-                    public int compare(DBObject o1, DBObject o2) {
-                        Timestamp timestamp1 = o1.getAttributeById(Attributes.CREATED_WHEN).getTimestampValue();
-                        Timestamp timestamp2 = o2.getAttributeById(Attributes.CREATED_WHEN).getTimestampValue();
-                        return timestamp1.compareTo(timestamp2);
-                    }
-                });
-                for (DBObject obj: camps) {
-                    DBAttribute enabled = obj.getAttributeById(Attributes.ENABLED);
-                    if (enabled != null && !enabled.getBooleanValue()) continue;
+                    task.put("userFullName", getUser().getFullName());
                     Map campaign = new HashMap();
-                    campaigns.add(campaign);
-                    campaign.put("id", obj.getId().toString());
+                    task.put("campaign", campaign);
+                    DBObject obj1 = ObjectCache.getObject(obj.getAttributeById(Attributes.CAMP_ID).getIdValue());
+                    campaign.put("id", obj1.getId().toString());
                     Map name = new HashMap();
                     campaign.put("name", name);
                     name.put("attrId", Attributes.NAME);
-                    attr = obj.getAttributeById(Attributes.NAME);
-                    if (attr != null) {
-                        name.put("value", attr.getTextValue());
-                    } else {
-                        name.put("value", "");
-                    }
+                    name.put("value", obj1.getAttributeById(Attributes.NAME).getTextValue());
                     Map address = new HashMap();
                     campaign.put("address", address);
                     address.put("attrId", Attributes.ADDRESS);
-                    attr = obj.getAttributeById(Attributes.ADDRESS);
-                    if (attr != null) {
-                        address.put("value", attr.getTextValue());
+                    if (obj1.getAttributeById(Attributes.ADDRESS) != null) {
+                        address.put("value", obj1.getAttributeById(Attributes.ADDRESS).getTextValue());
                     } else {
                         address.put("value", "");
                     }
                     Map mapImg = new HashMap();
-                    campaign.put("mapImg", mapImg);
+                    campaign.put("scheme", mapImg);
                     mapImg.put("attrId", Attributes.MAP);
-                    attr = obj.getAttributeById(Attributes.MAP);
-                    if (attr != null) {
-                        mapImg.put("value", attr.getTextValue());
+                    if (obj1.getAttributeById(Attributes.MAP) != null &&
+                            obj1.getAttributeById(Attributes.MAP).getTextValue().length() > 0) {
+                        mapImg.put("value", obj1.getAttributeById(Attributes.MAP).getTextValue());
+                        mapImg.put("uploaded", true);
                     } else {
                         mapImg.put("value", "");
+                        mapImg.put("uploaded", false);
                     }
                     Map km = new HashMap();
                     campaign.put("km", km);
                     km.put("attrId", Attributes.KM);
-                    attr = obj.getAttributeById(Attributes.KM);
-                    if (attr != null) {
-                        km.put("value", attr.getTextValue());
+                    if (obj1.getAttributeById(Attributes.KM) != null) {
+                        km.put("value", obj1.getAttributeById(Attributes.KM).getTextValue());
                     } else {
                         km.put("value", "");
                     }
-                    Map site = new HashMap();
-                    campaign.put("site", site);
-                    site.put("attrId", Attributes.SITE);
-                    attr = obj.getAttributeById(Attributes.SITE);
-                    if (attr != null) {
-                        site.put("value", attr.getTextValue());
-                    } else {
-                        site.put("value", "");
-                    }
+//                    Map fio = new HashMap();
+//                    campaign.put("fio", fio);
+//                    fio.put("attrId", Attributes.FIO);
+//                    if (obj1.getAttributeById(Attributes.FIO) != null) {
+//                        fio.put("value", obj1.getAttributeById(Attributes.FIO).getTextValue());
+//                    } else {
+//                        fio.put("value", "");
+//                    }
                     Map contacts = new HashMap();
                     campaign.put("contacts", contacts);
                     contacts.put("attrId", Attributes.CONTACTS);
-                    DBAttribute cont = obj.getAttributeById(Attributes.CONTACTS);
-                    List conts = new ArrayList();
-                    contacts.put("values", conts);
+                    DBAttribute cont = obj1.getAttributeById(Attributes.CONTACTS);
                     if (cont != null) {
-                        String con = cont.getTextValue();
-                        //add  to conts
+                        contacts.put("value", cont.getTextValue());
+                    } else {
+                        contacts.put("value", "");
                     }
-
                 }
-
-
             }
         };
         out.append(body.render());

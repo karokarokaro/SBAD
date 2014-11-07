@@ -4,7 +4,9 @@ public class Attributes {
     public static final String TEXT = "1";
 
     public static final String ENABLED = "7";
+    public static final String SURNAME = "8";
     public static final String NAME = "9";
+    public static final String PATR_NAME = "10";
 
     public static final String DATE = "30";
     public static final String LOGIN = "33";
@@ -30,7 +32,8 @@ public class Attributes {
     public static final String KM = "51";
     public static final String TIME_NEEDED = "52";
     public static final String BILL_NBR = "53";
-
-
+    public static final String FIO = "54";
+    public static final String CAMP_ID = "55";
+    public static final String DATE_TEXT = "56";
 }
 
