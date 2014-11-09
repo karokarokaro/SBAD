@@ -73,7 +73,10 @@ addInitFunction(function(){
         var id = "kareditable-"+pk+"-50"
         $(value).attr("id", id);
         initKarEditable(id, {
+            pk: pk,
+            attrId: 50,
             url: editableURL,
+            act: "updateCamp",
             type: "file",
             emptytext: 'Пусто',
             params: function(params) {

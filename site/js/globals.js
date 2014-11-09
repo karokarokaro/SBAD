@@ -217,6 +217,9 @@ function prepareAndShowKarEditableContacts(params) {
 function prepareAndShowKarEditableFile(params) {
     var $popup = $('#karEditablePopupFile');
     prepareKarEditablePopupHeader($popup, params);
+    $popup.find('form input[name="pk"]').val(params.pk);
+    $popup.find('form input[name="attrId"]').val(params.attrId);
+    $popup.find('form input[name="act"]').val(params.act);
     $popup.modal("show");
 }
 addInitFunction(function() {

@@ -245,6 +245,9 @@ public class ActionPage2 extends JSONPage {
                 putJSONUpdateInfo();
             }
         }
+        if (Attributes.MAP.equals(paramAttrId)) {
+            throw new RedirectException("/crm/campaigns.jsp");
+        }
     }
 
     protected void putJSONUpdateInfo() {
@@ -356,9 +359,10 @@ public class ActionPage2 extends JSONPage {
         paramDateText = request.getParameter("dateText");
         paramBillNbr = request.getParameter("billNbr");
         multiParams = FileHelper.processMultipartRequest(request);
-        if (multiParams != null && multiParams.containsKey("act")) {
-            paramAct = multiParams.get("act");
-            paramValue = multiParams.get("value");
+        if (multiParams != null) {
+            if (multiParams.containsKey("act")) paramAct = multiParams.get("act");
+            if (multiParams.containsKey("value")) paramValue = multiParams.get("value");
+            if (multiParams.containsKey("pk")) paramPK = multiParams.get("pk");
         }
     }
 

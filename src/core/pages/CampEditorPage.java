@@ -6,6 +6,7 @@ import core.database.Attributes;
 import core.database.DBAttribute;
 import core.database.DBObject;
 import core.entity.CampTypes;
+import core.entity.UserRoles;
 import core.exceptions.RedirectException;
 import core.helpers.TempHelper;
 import core.helpers.TemplateRenderer;
@@ -32,7 +33,9 @@ public class CampEditorPage extends HtmlPage {
     }
 
     protected void authorize() throws Exception {
-        if (getUser() == null) throw new RedirectException("/crm/login.jsp");
+        if (getUser() == null
+                || !(UserRoles.Buyer.equals(getUser().getRole()) ||
+                    UserRoles.Manager.equals(getUser().getRole()))) throw new RedirectException("/crm/login.jsp");
     }
 
 
