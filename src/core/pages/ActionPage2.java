@@ -181,7 +181,7 @@ public class ActionPage2 extends JSONPage {
             Logger.error(e);
         }
         if (Attributes.SOURCE.equals(paramAttrId) ||
-                Attributes.NAME.endsWith(paramAttrId) ||
+                Attributes.NAME.equals(paramAttrId) ||
                 Attributes.CONTACTS.equals(paramAttrId) ||
                 Attributes.PHONE.equals(paramAttrId) ||
                 Attributes.COMMENT.equals(paramAttrId) ||
@@ -363,8 +363,8 @@ public class ActionPage2 extends JSONPage {
             if (multiParams.containsKey("act")) paramAct = multiParams.get("act");
             if (multiParams.containsKey("value")) paramValue = multiParams.get("value");
             if (multiParams.containsKey("pk")) paramPK = multiParams.get("pk");
+            if (multiParams.containsKey("attrId")) paramAttrId = multiParams.get("attrId");
         }
     }
 
 }
-
