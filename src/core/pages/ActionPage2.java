@@ -49,6 +49,7 @@ public class ActionPage2 extends JSONPage {
     protected String paramValue;
     protected String paramComment;
     protected String paramDate;
+    protected String paramDateOnly;
     protected String paramMinute;
     protected String paramReason;
     protected String paramManagerId;
@@ -135,6 +136,26 @@ public class ActionPage2 extends JSONPage {
             vals = new ArrayList();
             vals.add(paramBillNbr);
             params.put(new BigInteger(Attributes.BILL_NBR), vals);
+        }
+        Date date = null;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (paramDateOnly != null && !paramDateOnly.isEmpty()) {
+            try {
+                date = dateFormat.parse(paramDateOnly);
+            } catch (ParseException e) {
+                Logger.error("incorrect date: " + paramDate);
+            }
+        }
+        if (date != null) {
+            vals = new ArrayList();
+            Timestamp ts = new Timestamp(date.getTime());
+            if (ts == null) {
+                putJSONError("Ошибка формата. ");
+                Logger.error("Ошибка формата даты: " + paramValue);
+            } else {
+                vals.add(ts);
+                params.put(new BigInteger(Attributes.DATE_ONLY), vals);
+            }
         }
         vals = new ArrayList();
         vals.add(getUser().getId());
@@ -227,6 +248,35 @@ public class ActionPage2 extends JSONPage {
                 return;
             }
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date = dateFormat.parse(paramValue);
+            Timestamp ts = new Timestamp(date.getTime());
+            if (ts == null) {
+                putJSONError("Ошибка формата. ");
+                Logger.error("Ошибка формата даты: " + paramValue);
+            } else {
+                DBAttribute attr = object.getAttributeById(paramAttrId);
+                if (attr == null) {
+                    attr = new DBAttribute(new BigInteger(paramAttrId));
+                    attr.setValueTypeUsing("ts");
+                    object.getAttributes().add(attr);
+                }
+                attr.setTimestampValue(ts);
+                DBHelper.updateObject(object);
+                putJSONSuccess();
+                putJSONUpdateInfo();
+            }
+        }else if (Attributes.DATE_ONLY.equals(paramAttrId)) {
+            if (paramValue.isEmpty()) {
+                DBAttribute attr = object.getAttributeById(paramAttrId);
+                if (attr != null) {
+                    object.getAttributes().remove(attr);
+                }
+                DBHelper.updateObject(object);
+                putJSONSuccess();
+                putJSONUpdateInfo();
+                return;
+            }
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = dateFormat.parse(paramValue);
             Timestamp ts = new Timestamp(date.getTime());
             if (ts == null) {
@@ -348,6 +398,7 @@ public class ActionPage2 extends JSONPage {
         paramAttrId = request.getParameter("attrId");
         paramComment = request.getParameter("comment");
         paramDate = request.getParameter("date");
+        paramDateOnly = request.getParameter("dateOnly");
         paramMinute = request.getParameter("minute");
         paramReason = request.getParameter("reason");
         paramContacts = request.getParameter("contacts");

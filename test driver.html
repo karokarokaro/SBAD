@@ -10,7 +10,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand">Редактор заданий</a>
+        <a class="navbar-brand">Задания для водителя</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -18,15 +18,7 @@
 
         <ul class="nav navbar-nav navbar-right navbar-user">
             <li class="dropdown user-dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list-alt"></i> Страницы<b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <!--li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
-                    <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
-                    <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
-                    <li class="divider"></li-->
-                    <li><a><i class="fa fa-check-square-o"></i> Редактор заданий</a></li>
-                    <li><a href="/crm/campaigns.jsp"><i class="fa fa-users"></i> Редактор компаний</a></li>
-                </ul>
+                <a href="#" onclick="prepareAndShowSelectDate()" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i> Выбрать дату</a>
             </li>
             <li class="dropdown user-dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> ${user.login}<b class="caret"></b></a>
@@ -191,12 +183,12 @@
         </div>
     </form>
 </div>
-<div id="karEditablePopupDateOnly" class="modal hide fade in" tabindex="-1" data-width="760">
+<div id="dateSelectPopup" class="modal hide fade in" tabindex="-1" data-width="760">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Введите дату</h3>
     </div>
-    <form role="form">
+    <form role="form" action="" method="post">
         <input type="hidden" name="value"/>
         <div class="modal-body">
             <div class="row-fluid">
@@ -213,7 +205,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn okButton btn-success">Ок</button>
+            <button type="submit" class="btn okButton btn-success">Ок</button>
             <button type="button" data-dismiss="modal" class="btn btn-default">Отмена</button>
         </div>
     </form>
@@ -284,13 +276,13 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <h2>Задания</h2>
+        <h2>Задания на ${titleDate}</h2>
         <div class="table-responsive">
             <table class="table table-bordered table-hover taskTable">
                 <thead>
                 <tr>
                     <th class="seqCol">&nbsp;</th>
-                    <th class="checkCol">&nbsp;</th>
+                    <!--<th class="checkCol">&nbsp;</th>-->
                     <th class="nameCol">Компания</th>
                     <th class="contactsCol">Контакты</th>
                     <th class="addressCol">Адрес</th>
@@ -307,9 +299,9 @@
                 <#list tasks as task>
                     <tr obj-id="${task.id}">
                         <td class="seqCol">${task.seqNumber}.</td>
-                        <td class="checkCol">
-                            <input type="checkbox"/>
-                        </td>
+                        <!--<td class="checkCol">-->
+                            <!--<input type="checkbox"/>-->
+                        <!--</td>-->
                         <td class="nameCol">
                             ${task.campaign.name.value}
                         </td>
@@ -324,16 +316,16 @@
                         </td>
                         <td class="schemeCol">
                             <#if task.campaign.scheme.uploaded>
-                                Загружено
+                                <input class="schemeNeeded" type="checkbox" />
                                 <#else>
-                                Не загружено
+                                    Не загружено
                             </#if>
                         </td>
                         <td class="billNbrCol">
-                            <a href="#" data-type="textarea" data-pk="${task.id}" attr-id="${task.billNbr.attrId}" data-title="Введите номера счетов" class="editable editable-pre-wrapped editable-click" data-original-title="" title="">${task.billNbr.value}</a>
+                            ${task.billNbr.value}
                         </td>
                         <td class="commentsCol">
-                            <a href="#" data-type="textarea" data-pk="${task.id}" attr-id="${task.comments.attrId}" data-title="Введите комментарий" class="editable editable-pre-wrapped editable-click" data-original-title="" title="">${task.comments.value}</a>
+                            ${task.comments.value}
                         </td>
                         <td class="managerCol">
                             ${task.userFullName}
@@ -342,10 +334,10 @@
                             ${task.campaign.km.value}
                         </td>
                         <td class="dateCol">
-                            <a href="#" attr-id="${task.dateOnly.attrId}" data-type="combodateonly" data-template="D MMM YYYY" data-format="YYYY-MM-DD" data-viewformat="MMM D, YYYY" data-pk="${task.id}" data-value="${task.dateOnly.value}" data-title="Введите дату" class="kareditable">${task.dateOnly.value}</a>
+                            ${task.dateOnly.value}
                         </td>
                         <td class="dateTextCol">
-                            <a href="#" attr-id="${task.dateText.attrId}" data-type="text" data-pk="${task.id}" data-value="${task.dateText.value}" data-title="Введите дату и время звонка" class="editable editable-click">${task.dateText.value}</a>
+                            ${task.dateText.value}
                         </td>
                     </tr>
                 </#list>
@@ -354,18 +346,23 @@
         </div>
     </div>
 </div>
-<div class="row bottomToolbar">
-    <div class="col-lg-12">
-        <div class="btn-group inedit-control-group btn-group-xs">
-            <button id="inedit-disable" disabled class="btn btn-success" data-toggle="button">Принять</button>
-            <button id="inedit-enable" class="btn btn-danger" data-toggle="button">Редактировать</button>
-        </div>
-        <br/>
-        <a type="button" class="btn btn-success addTaskButton">Добавить задание</a>
-        <a type="button" class="btn btn-danger deleteTaskButton">Удалить задание</a>
+<div class="row">
+    <div class="col-lg-6">
 
     </div>
 </div>
+<!--<div class="row bottomToolbar">-->
+    <!--<div class="col-lg-12">-->
+        <!--<div class="btn-group inedit-control-group btn-group-xs">-->
+            <!--<button id="inedit-disable" disabled class="btn btn-success" data-toggle="button">Принять</button>-->
+            <!--<button id="inedit-enable" class="btn btn-danger" data-toggle="button">Редактировать</button>-->
+        <!--</div>-->
+        <!--<br/>-->
+        <!--<a type="button" class="btn btn-success addTaskButton">Добавить задание</a>-->
+        <!--<a type="button" class="btn btn-danger deleteTaskButton">Удалить задание</a>-->
+
+    <!--</div>-->
+<!--</div>-->
 </div><!-- /#page-wrapper -->
 
 </div><!-- /#wrapper -->

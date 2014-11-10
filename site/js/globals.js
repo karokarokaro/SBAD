@@ -23,6 +23,7 @@ function parseForm($form){
 KarEditable = {
     clickHandlers: {
         "combodate": prepareAndShowKarEditableComboDate,
+        "combodateonly": prepareAndShowKarEditableComboDateOnly,
         "contacts" : prepareAndShowKarEditableContacts,
         "file" : prepareAndShowKarEditableFile
     },
@@ -145,6 +146,20 @@ function prepareAndShowKarEditableComboDate(params) {
     }
     $popup.modal("show");
 }
+function prepareAndShowSelectDate() {
+    var $popup = $('#dateSelectPopup');
+    $popup.find("form").find('input[name="date"]').val('');
+    $popup.modal("show");
+}
+function prepareAndShowKarEditableComboDateOnly(params) {
+    var $popup = $('#karEditablePopupDateOnly');
+    prepareKarEditablePopupHeader($popup, params);
+    if (params.value.length == 10) {
+        var val = params.value;
+        $popup.find("form").find('input[name="date"]').val(val);
+    }
+    $popup.modal("show");
+}
 function contactsRefreshHolder($holder) {
     var tr = "<tr>\n" +
         "                                        <td>\n" +
@@ -188,7 +203,7 @@ function getDisplayContacts(value) {
         if (vals[i] == "") continue;
         var phone = vals[i].split("=")[0];
         var name = vals[i].split("=")[1];
-        res += phone + "("+name+")<br/>";
+        res += '<div>'+phone+'</div><div class="telName">'+name+'</div>';
     }
     return res;
 }
@@ -228,8 +243,12 @@ addInitFunction(function() {
         var minute = $popup.find("form").find('select[name="minute"]').val();
         return date+":"+minute;
     });
+    initKarEditableOkButton($('#karEditablePopupDateOnly'), function($popup) {
+        var date = $popup.find("form").find('input[name="date"]').val();
+        return date;
+    });
     initKarEditableOkButton($('#karEditablePopupContacts'), function($popup) {
         return getContactsValueFromHolder($popup.find(".contactsHolder"));
     });
-    initKarEditableOkButton($('#karEditablePopupFile'));
+  //  initKarEditableOkButton($('#karEditablePopupFile'));
 });

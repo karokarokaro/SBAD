@@ -1,5 +1,10 @@
 package core.entity;
 
+import core.database.Attributes;
+import core.database.DBAttribute;
+import core.database.DBObject;
+import core.helpers.HashHelper;
+
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
@@ -89,5 +94,28 @@ public class User {
 
     public void setLoginTime(Timestamp loginTime) {
         this.loginTime = loginTime;
+    }
+    
+    public static User valueOf(DBObject userDB) {
+        User user = new User();
+        user.setId(userDB.getId());
+        DBAttribute roleAttr = userDB.getAttributeById(Attributes.ROLE);
+        UserRoles role = UserRoles.get(roleAttr.getTextValue());
+        if (role != null) {
+            user.setRole(role);
+        } else {
+            user.setRole(UserRoles.Guest);
+        }
+        user.setLogin(userDB.getAttributeById(Attributes.LOGIN).getTextValue());
+        user.setPassHash(userDB.getAttributeById(Attributes.PASSWORD_HASH).getTextValue());
+        user.setLoginTime(new Timestamp(1));
+        DBAttribute attr;
+        attr = userDB.getAttributeById(Attributes.NAME);
+        if (attr!=null) user.setName(attr.getTextValue());
+        attr = userDB.getAttributeById(Attributes.SURNAME);
+        if (attr!=null) user.setSurname(attr.getTextValue());
+        attr = userDB.getAttributeById(Attributes.PATR_NAME);
+        if (attr!=null) user.setPatrname(attr.getTextValue());
+        return user;
     }
 }

@@ -12,7 +12,7 @@ function prepareAddPopup($popup) {
 function prepareAddTaskPopup($popup) {
     //$popup.find('select[name="campId"]').val();
     $popup.find('input[name="dateText"]').val("");
-    $popup.find('input[name="comment"]').val("");
+    $popup.find('input[name="comment"]').val("Без комментариев");
     $popup.find('input[name="billNbr"]').val("");
     $popup.find('p.help-block').html("");
     return true;
@@ -119,6 +119,21 @@ addInitFunction(function() {
 		formatTime: 'H',
         defaultSelect: false,
         allowTimes:['09', '10','11',  '12', '13', '14', '15', '16', '17', '18']
+    });
+    $('#karEditablePopupDateOnly').find('input[name="date"]').datetimepicker({
+        lang:'ru',
+        format: 'Y-m-d',
+        defaultSelect: false
+    });
+    $('#addTaskPopup').find('input[name="dateOnly"]').datetimepicker({
+        lang:'ru',
+        format: 'Y-m-d',
+        defaultSelect: false
+    });
+    $('#dateSelectPopup').find('input[name="date"]').datetimepicker({
+        lang:'ru',
+        format: 'Y-m-d',
+        defaultSelect: false
     });
 });
 

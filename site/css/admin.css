@@ -233,7 +233,7 @@ table.tablesorter thead tr th:hover {
     word-wrap: break-word;
 }
 .labelCol {
-    width: 110px;
+    width: 125px;
 }
 .modal-body {
     max-height: 400px;
@@ -331,4 +331,14 @@ form.editableform textarea {
     color: #468847;
     background-color: #dff0d8;
     border-color: #468847;
+}
+
+.telName {
+    font-size: 12px;
+    line-height: 1;
+    color: #a9a9a9;
+}
+
+.schemeCol {
+    text-align: center;
 }

@@ -68,6 +68,25 @@ addInitFunction(function(){
             error: onErrorResponse
         });
     });
+    $.each($('.kareditable[attr-id="57"]'), function(key, value) {
+        var pk = $(value).attr("data-pk");
+        var id = "kareditable-"+pk+"-57"
+        $(value).attr("id", id);
+        initKarEditable(id, {
+            url: editableURL,
+            type: "combodateonly",
+            emptytext: 'Пусто',
+            params: function(params) {
+                params.pk = pk;
+                params.attrId = 57;
+                params.act = "updateTask";
+                return params;
+            },
+            title: "Введите дату",
+            success: onSuccessResponse,
+            error: onErrorResponse
+        });
+    });
     $.each($('.kareditable[attr-id="50"]'), function(key, value) {
         var pk = $(value).attr("data-pk");
         var id = "kareditable-"+pk+"-50"

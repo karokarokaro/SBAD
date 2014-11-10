@@ -1,9 +1,8 @@
 <%@ page import="core.pages.AbstractPage" %>
-<%@ page import="core.pages.ActionPage2" %>
-<%@ page import="core.Logger" %>
+<%@ page import="core.pages.DriverPage" %>
 <%@ page contentType="text/html;charset=UTF-8"
          language="java"
         %><%
-    AbstractPage thisPage = new ActionPage2(request, response);
+    AbstractPage thisPage = new DriverPage(request, response);
     thisPage.executeRequest();
 %>

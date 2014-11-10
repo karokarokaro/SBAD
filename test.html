@@ -103,7 +103,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3></h3>
     </div>
-    <form role="form" enctype="multipart/form-data">
+    <form role="form" enctype="multipart/form-data" method="post" action="/crm/action.jsp">
         <input type="hidden" name="act"/>
         <input type="hidden" name="pk"/>
         <input type="hidden" name="attrId"/>
@@ -122,7 +122,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn okButton btn-success">Ок</button>
+            <button type="submit" class="btn okButton btn-success">Ок</button>
             <button type="button" data-dismiss="modal" class="btn btn-default">Отмена</button>
         </div>
     </form>

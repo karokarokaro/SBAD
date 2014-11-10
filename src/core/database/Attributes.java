@@ -35,5 +35,7 @@ public class Attributes {
     public static final String FIO = "54";
     public static final String CAMP_ID = "55";
     public static final String DATE_TEXT = "56";
+    public static final String DATE_ONLY = "57";
+
 }
 

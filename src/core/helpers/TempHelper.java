@@ -11,6 +11,7 @@ import core.entity.User;
 import java.math.BigInteger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -101,6 +102,32 @@ public class TempHelper {
                     Attributes.CREATED_BY + " and v.id_v = " + user.getId().toString() +
                     " and exists(select object_id from objects o where o.object_id=v.object_id and " +
                     "o.object_type_id="+ObjectTypes.DriverTask+")");
+            while (resultSet.next()) {
+                BigInteger id = resultSet.getBigDecimal("object_id").toBigInteger();
+                ids.add(id);
+                ObjectCache.addIdToLoad(id);
+            }
+        } catch (Exception e) {
+            Logger.error(e);
+        }
+        List<DBObject> res = new ArrayList<DBObject>();
+        for (BigInteger id: ids) {
+            DBObject dbObject = ObjectCache.getObject(id);
+            if (dbObject != null) {
+                res.add(dbObject);
+            }
+        }
+        return res;
+    }
+    public static List<DBObject> getDriverTasksByTs(Timestamp ts) {
+        List<BigInteger> ids = new ArrayList<BigInteger>();
+        try {
+            PreparedStatement ps = SQLController.prepare("select object_id from vals v where v.attr_id=" +
+                    Attributes.DATE_ONLY + " and v.ts_v = ? " +
+                    " and exists(select object_id from objects o where o.object_id=v.object_id and " +
+                    "o.object_type_id="+ObjectTypes.DriverTask+")");
+            ps.setTimestamp(1, ts);
+            ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 BigInteger id = resultSet.getBigDecimal("object_id").toBigInteger();
                 ids.add(id);

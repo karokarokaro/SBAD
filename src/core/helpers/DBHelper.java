@@ -486,7 +486,7 @@ public class DBHelper {
                             } else if (val instanceof String) {
                                 preparedStatement.setTimestamp(i+1, Timestamp.valueOf((String) val));
                             } else {
-                                preparedStatement.setTimestamp(i+1, Timestamp.valueOf((String) val));
+                                preparedStatement.setTimestamp(i+1, (Timestamp) val);
                             }
                         } else if (using.equals("text")) {
                             preparedStatement.setString(i+1, (String)val);

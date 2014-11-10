@@ -5,24 +5,27 @@ import core.cache.ObjectCache;
 import core.database.Attributes;
 import core.database.DBAttribute;
 import core.database.DBObject;
-import core.entity.CampTypes;
+import core.entity.User;
 import core.entity.UserRoles;
 import core.exceptions.RedirectException;
+import core.helpers.FileHelper;
 import core.helpers.TempHelper;
 import core.helpers.TemplateRenderer;
-import sun.plugin.javascript.navig.Array;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
-import java.sql.Timestamp;
+import java.util.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.sql.Timestamp;
 
-public class TaskEditorPage extends HtmlPage {
+public class DriverPage extends HtmlPage {
 
-    public TaskEditorPage(HttpServletRequest request, HttpServletResponse response) {
+
+    protected String paramDate;
+
+    public DriverPage(HttpServletRequest request, HttpServletResponse response) {
         super(request, response);
     }
 
@@ -35,14 +38,23 @@ public class TaskEditorPage extends HtmlPage {
 
     protected void authorize() throws Exception {
         if (getUser() == null
-                || !(UserRoles.Buyer.equals(getUser().getRole()) ||
-                UserRoles.Manager.equals(getUser().getRole()))) throw new RedirectException("/crm/login.jsp");
+                || !UserRoles.Driver.equals(getUser().getRole())) throw new RedirectException("/crm/login.jsp");
     }
 
 
     protected void renderBody() throws Exception {
-        TemplateRenderer body = new TemplateRenderer(request, response, new BigInteger("4784")) {
+        TemplateRenderer body = new TemplateRenderer(request, response, new BigInteger("4895")) {
             protected void mapTemplateModel() throws Exception {
+                Timestamp ts = null;
+                if (paramDate != null) {
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date dt = dateFormat.parse(paramDate);
+                    ts = new Timestamp(dt.getTime());
+                } else {
+                    ts = new Timestamp(new SimpleDateFormat("yyyy-MM-dd")
+                            .parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date())).getTime());
+                }
+                templateParams.put("titleDate", new SimpleDateFormat("yyyy-MM-dd").format(ts));
                 DBAttribute attr;
                 Map user = new HashMap<String, String>();
                 templateParams.put("user", user);
@@ -74,15 +86,15 @@ public class TaskEditorPage extends HtmlPage {
                 }
                 List tasks = new ArrayList();
                 templateParams.put("tasks", tasks);
-                List<DBObject> taskObjects = TempHelper.getTasksByUser(getUser());
-                Collections.sort(taskObjects, new Comparator<DBObject>() {
-                    @Override
-                    public int compare(DBObject o1, DBObject o2) {
-                        Timestamp timestamp1 = o1.getAttributeById(Attributes.CREATED_WHEN).getTimestampValue();
-                        Timestamp timestamp2 = o2.getAttributeById(Attributes.CREATED_WHEN).getTimestampValue();
-                        return timestamp1.compareTo(timestamp2);
-                    }
-                });
+                List<DBObject> taskObjects = TempHelper.getDriverTasksByTs(ts);
+//                Collections.sort(taskObjects, new Comparator<DBObject>() {
+//                    @Override
+//                    public int compare(DBObject o1, DBObject o2) {
+//                        Timestamp timestamp1 = o1.getAttributeById(Attributes.CREATED_WHEN).getTimestampValue();
+//                        Timestamp timestamp2 = o2.getAttributeById(Attributes.CREATED_WHEN).getTimestampValue();
+//                        return timestamp1.compareTo(timestamp2);
+//                    }
+//                });
                 int i = 0;
                 for (DBObject obj: taskObjects) {
                     DBAttribute enabled = obj.getAttributeById(Attributes.ENABLED);
@@ -124,7 +136,12 @@ public class TaskEditorPage extends HtmlPage {
                     } else {
                         date.put("value", "");
                     }
-                    task.put("userFullName", getUser().getFullName());
+                    String userName = "";
+                    if (obj.getAttributeById(Attributes.CREATED_BY) != null) {
+                        User us = User.valueOf(ObjectCache.getObject(obj.getAttributeById(Attributes.CREATED_BY).getIdValue()));
+                        userName = us.getFullName();
+                    }
+                    task.put("userFullName", userName);
                     Map dateOnly = new HashMap();
                     task.put("dateOnly", dateOnly);
                     dateOnly.put("attrId", Attributes.DATE_ONLY);
@@ -192,4 +209,9 @@ public class TaskEditorPage extends HtmlPage {
         };
         out.append(body.render());
     }
+
+    protected void parseParams() throws Exception {
+        paramDate = request.getParameter("date");
+    }
+
 }
