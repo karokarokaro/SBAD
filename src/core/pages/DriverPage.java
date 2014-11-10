@@ -64,6 +64,8 @@ public class DriverPage extends HtmlPage {
                 user.put("isAdmin", getUser().isAdmin());
                 user.put("isGuest", getUser().isGuest());
                 user.put("roleDescr", getUser().getRole().getDescription());
+                List schemes = new ArrayList();
+                templateParams.put("schemes", schemes);
                 List campaigns = new ArrayList();
                 templateParams.put("campaigns", campaigns);
                 List<DBObject> campObjects = TempHelper.getCampaigns2ByUser(getUser());
@@ -82,7 +84,6 @@ public class DriverPage extends HtmlPage {
                     campaigns.add(camp);
                     camp.put("id", obj.getId().toString());
                     camp.put("name",obj.getAttributeById(Attributes.NAME).getTextValue());
-
                 }
                 List tasks = new ArrayList();
                 templateParams.put("tasks", tasks);
@@ -175,6 +176,17 @@ public class DriverPage extends HtmlPage {
                             obj1.getAttributeById(Attributes.MAP).getTextValue().length() > 0) {
                         mapImg.put("value", obj1.getAttributeById(Attributes.MAP).getTextValue());
                         mapImg.put("uploaded", true);
+                        boolean needed = true;
+                        for (Object scheme: schemes) {
+                            if (((Map)scheme).get("campId").equals(obj1.getId().toString())) needed = false;
+                        }
+                        if (needed) {
+                            Map scheme = new HashMap();
+                            scheme.put("src", obj1.getAttributeById(Attributes.MAP).getTextValue());
+                            scheme.put("campId", obj1.getId().toString());
+                            scheme.put("title", obj1.getAttributeById(Attributes.NAME).getTextValue());
+                            schemes.add(scheme);
+                        }
                     } else {
                         mapImg.put("value", "");
                         mapImg.put("uploaded", false);

@@ -297,7 +297,7 @@
                 </thead>
                 <tbody>
                 <#list tasks as task>
-                    <tr obj-id="${task.id}">
+                    <tr obj-id="${task.id}" camp-id="${task.campaign.id}">
                         <td class="seqCol">${task.seqNumber}.</td>
                         <!--<td class="checkCol">-->
                             <!--<input type="checkbox"/>-->
@@ -346,10 +346,14 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-6">
+<div class="row schemes">
+    <#list schemes as scheme>
+        <div class="half hid" camp-id="${scheme.campId}">
+            <h4>${scheme.title}</h4>
+            <img src="${scheme.src}" />
+        </div>
+    </#list>
 
-    </div>
 </div>
 <!--<div class="row bottomToolbar">-->
     <!--<div class="col-lg-12">-->
@@ -365,4 +369,4 @@
 <!--</div>-->
 </div><!-- /#page-wrapper -->
 
-</div><!-- /#wrapper -->
+</div><!-- 

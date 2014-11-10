@@ -342,3 +342,19 @@ form.editableform textarea {
 .schemeCol {
     text-align: center;
 }
+.schemes {
+    position: relative;
+}
+.schemes img {
+    max-width: 95%;
+}
+
+.half {
+    float: left;
+    overflow: hidden;
+    width: 46%;
+    margin: 2%;
+}
+.hid {
+    display: none;
+}

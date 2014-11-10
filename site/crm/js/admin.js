@@ -113,6 +113,17 @@ addInitFunction(function() {
             $('#addTaskPopup').modal("show");
         }
     });
+    $(".schemeNeeded").change(function() {
+        var isChecked = $(this).is(':checked');
+        var campId = $(this).closest("tr").attr("camp-id");
+        if (isChecked) {
+            $('.taskTable tr[camp-id="'+campId+'"] .schemeNeeded').prop('checked', true);
+            $('.schemes .half[camp-id="'+campId+'"]').show();
+        } else {
+            $('.taskTable tr[camp-id="'+campId+'"] .schemeNeeded').prop('checked', false);
+            $('.schemes .half[camp-id="'+campId+'"]').hide();
+        }
+    });
     $('#callPopup, #karEditablePopupDate').find('input[name="date"]').datetimepicker({
         lang:'ru',
         format: 'Y-m-d H',
