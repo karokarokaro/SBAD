@@ -17,6 +17,15 @@ public class User {
     private String patrname;
     private String name;
     private String surname;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getPatrname() {
         return patrname;
@@ -26,10 +35,11 @@ public class User {
         this.patrname = patrname;
     }
 
-    public String getFullName() {
-        return (surname!=null ? surname+" " : "") +
+    public String getMiniInfo() {
+        return "<div>" + (phone != null ? phone : "") + "</div>" +
+                "<div class=\"telName\">"+(surname!=null ? surname+" " : "") +
                 (name!=null ? name+" " : "") +
-                (patrname!=null ? patrname : "");
+                (patrname!=null ? patrname : "") + "</div>";
     }
 
     public String getName() {
@@ -116,6 +126,8 @@ public class User {
         if (attr!=null) user.setSurname(attr.getTextValue());
         attr = userDB.getAttributeById(Attributes.PATR_NAME);
         if (attr!=null) user.setPatrname(attr.getTextValue());
+        attr = userDB.getAttributeById(Attributes.PHONE);
+        if (attr!=null) user.setPhone(attr.getTextValue());
         return user;
     }
 }

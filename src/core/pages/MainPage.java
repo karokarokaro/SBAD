@@ -1,7 +1,6 @@
 package core.pages;
 
 
-import core.Logger;
 import core.cache.ObjectCache;
 import core.database.Attributes;
 import core.database.DBAttribute;
@@ -43,7 +42,7 @@ public class MainPage extends HtmlPage {
                 templateParams.put("user", user);
                 user.put("login", getUser().getLogin());
                 user.put("id", getUser().getId().toString());
-                user.put("fullName", getUser().getFullName());
+                user.put("fullName", getUser().getMiniInfo());
                 user.put("isAdmin", getUser().isAdmin());
                 Map campTypes = new HashMap();
                 templateParams.put("campTypes", campTypes);

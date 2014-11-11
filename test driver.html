@@ -18,6 +18,9 @@
 
         <ul class="nav navbar-nav navbar-right navbar-user">
             <li class="dropdown user-dropdown">
+                <a href="#" onclick="window.print()" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-print"></i> Печать</a>
+            </li>
+            <li class="dropdown user-dropdown">
                 <a href="#" onclick="prepareAndShowSelectDate()" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i> Выбрать дату</a>
             </li>
             <li class="dropdown user-dropdown">
@@ -286,7 +289,7 @@
                     <th class="nameCol">Компания</th>
                     <th class="contactsCol">Контакты</th>
                     <th class="addressCol">Адрес</th>
-                    <th class="schemeCol">Схема</th>
+                    <th class="schemeCol hidden-print">Схема</th>
                     <th class="billNbrCol">Счет</th>
                     <th class="commentsCol">Комментарий</th>
                     <th class="managerCol">Ответственный</th>
@@ -314,7 +317,7 @@
                         <td class="addressCol">
                             ${task.campaign.address.value}
                         </td>
-                        <td class="schemeCol">
+                        <td class="schemeCol  hidden-print">
                             <#if task.campaign.scheme.uploaded>
                                 <input class="schemeNeeded" type="checkbox" />
                                 <#else>

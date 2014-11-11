@@ -71,11 +71,6 @@ public class ActionPage2 extends JSONPage {
         if (getUser() == null) throw new RedirectException("/crm/login.jsp");
     }
     protected void executeAdd() throws Exception {
-        paramName = multiParams.get("name");
-        paramAddress = multiParams.get("address");
-        paramScheme = multiParams.get("scheme");
-        paramKm = multiParams.get("km");
-        paramContacts = multiParams.get("contacts");
         Map<BigInteger, List> params = new HashMap<BigInteger, List>();
         List vals;
         vals = new ArrayList();
@@ -138,7 +133,7 @@ public class ActionPage2 extends JSONPage {
             params.put(new BigInteger(Attributes.BILL_NBR), vals);
         }
         Date date = null;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         if (paramDateOnly != null && !paramDateOnly.isEmpty()) {
             try {
                 date = dateFormat.parse(paramDateOnly);
@@ -247,7 +242,7 @@ public class ActionPage2 extends JSONPage {
                 putJSONUpdateInfo();
                 return;
             }
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = dateFormat.parse(paramValue);
             Timestamp ts = new Timestamp(date.getTime());
             if (ts == null) {
@@ -276,7 +271,7 @@ public class ActionPage2 extends JSONPage {
                 putJSONUpdateInfo();
                 return;
             }
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = dateFormat.parse(paramValue);
             Timestamp ts = new Timestamp(date.getTime());
             if (ts == null) {
@@ -413,8 +408,14 @@ public class ActionPage2 extends JSONPage {
         if (multiParams != null) {
             if (multiParams.containsKey("act")) paramAct = multiParams.get("act");
             if (multiParams.containsKey("value")) paramValue = multiParams.get("value");
+            if (multiParams.containsKey("scheme")) paramScheme = multiParams.get("scheme");
             if (multiParams.containsKey("pk")) paramPK = multiParams.get("pk");
             if (multiParams.containsKey("attrId")) paramAttrId = multiParams.get("attrId");
+            if (multiParams.containsKey("name")) paramName = multiParams.get("name");
+            if (multiParams.containsKey("contacts")) paramContacts = multiParams.get("contacts");
+            if (multiParams.containsKey("address")) paramAddress = multiParams.get("address");
+            if (multiParams.containsKey("km")) paramKm = multiParams.get("km");
+
         }
     }
 

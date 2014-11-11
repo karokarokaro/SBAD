@@ -358,3 +358,15 @@ form.editableform textarea {
 .hid {
     display: none;
 }
+
+@media print {
+    body, h2 {
+        margin-top: 0px !important;
+    }
+
+}
+@page
+{
+    size: auto;   /* auto is the current printer page size */
+    margin: 0mm;  /* this affects the margin in the printer settings */
+}

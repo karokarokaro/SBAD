@@ -8,7 +8,6 @@ import core.database.DBObject;
 import core.entity.User;
 import core.entity.UserRoles;
 import core.exceptions.RedirectException;
-import core.helpers.FileHelper;
 import core.helpers.TempHelper;
 import core.helpers.TemplateRenderer;
 
@@ -47,20 +46,20 @@ public class DriverPage extends HtmlPage {
             protected void mapTemplateModel() throws Exception {
                 Timestamp ts = null;
                 if (paramDate != null) {
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     Date dt = dateFormat.parse(paramDate);
                     ts = new Timestamp(dt.getTime());
                 } else {
-                    ts = new Timestamp(new SimpleDateFormat("yyyy-MM-dd")
-                            .parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date())).getTime());
+                    ts = new Timestamp(new SimpleDateFormat("dd/MM/yyyy")
+                            .parse(new SimpleDateFormat("dd/MM/yyyy").format(new Date())).getTime());
                 }
-                templateParams.put("titleDate", new SimpleDateFormat("yyyy-MM-dd").format(ts));
+                templateParams.put("titleDate", new SimpleDateFormat("dd/MM/yyyy").format(ts));
                 DBAttribute attr;
                 Map user = new HashMap<String, String>();
                 templateParams.put("user", user);
                 user.put("login", getUser().getLogin());
                 user.put("id", getUser().getId().toString());
-                user.put("fullName", getUser().getFullName());
+                user.put("fullName", getUser().getMiniInfo());
                 user.put("isAdmin", getUser().isAdmin());
                 user.put("isGuest", getUser().isGuest());
                 user.put("roleDescr", getUser().getRole().getDescription());
@@ -140,7 +139,7 @@ public class DriverPage extends HtmlPage {
                     String userName = "";
                     if (obj.getAttributeById(Attributes.CREATED_BY) != null) {
                         User us = User.valueOf(ObjectCache.getObject(obj.getAttributeById(Attributes.CREATED_BY).getIdValue()));
-                        userName = us.getFullName();
+                        userName = us.getMiniInfo();
                     }
                     task.put("userFullName", userName);
                     Map dateOnly = new HashMap();
@@ -148,7 +147,7 @@ public class DriverPage extends HtmlPage {
                     dateOnly.put("attrId", Attributes.DATE_ONLY);
                     DBAttribute dd = obj.getAttributeById(Attributes.DATE_ONLY);
                     if (dd != null) {
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                         dateOnly.put("value", dateFormat.format(dd.getTimestampValue()));
                     } else {
                         dateOnly.put("value", "");

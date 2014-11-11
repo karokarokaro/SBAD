@@ -1,11 +1,9 @@
 package core.pages;
 
 
-import core.cache.ObjectCache;
 import core.database.Attributes;
 import core.database.DBAttribute;
 import core.database.DBObject;
-import core.entity.CampTypes;
 import core.entity.UserRoles;
 import core.exceptions.RedirectException;
 import core.helpers.TempHelper;
@@ -15,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CampEditorPage extends HtmlPage {
@@ -46,7 +42,7 @@ public class CampEditorPage extends HtmlPage {
                 templateParams.put("user", user);
                 user.put("login", getUser().getLogin());
                 user.put("id", getUser().getId().toString());
-                user.put("fullName", getUser().getFullName());
+                user.put("fullName", getUser().getMiniInfo());
                 user.put("isAdmin", getUser().isAdmin());
                 user.put("isGuest", getUser().isGuest());
                 user.put("roleDescr", getUser().getRole().getDescription());
@@ -73,7 +69,12 @@ public class CampEditorPage extends HtmlPage {
                     Map name = new HashMap();
                     campaign.put("name", name);
                     name.put("attrId", Attributes.NAME);
-                    name.put("value", obj.getAttributeById(Attributes.NAME).getTextValue());
+                    if (obj.getAttributeById(Attributes.NAME) != null) {
+                        name.put("value", obj.getAttributeById(Attributes.NAME).getTextValue());
+                    } else {
+                        name.put("value", "");
+                    }
+
                     Map address = new HashMap();
                     campaign.put("address", address);
                     address.put("attrId", Attributes.ADDRESS);

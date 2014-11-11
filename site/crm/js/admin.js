@@ -133,17 +133,20 @@ addInitFunction(function() {
     });
     $('#karEditablePopupDateOnly').find('input[name="date"]').datetimepicker({
         lang:'ru',
-        format: 'Y-m-d',
+        format: 'd/m/Y',
+        timepicker:false,
         defaultSelect: false
     });
     $('#addTaskPopup').find('input[name="dateOnly"]').datetimepicker({
         lang:'ru',
-        format: 'Y-m-d',
+        timepicker:false,
+        format: 'd/m/Y',
         defaultSelect: false
     });
     $('#dateSelectPopup').find('input[name="date"]').datetimepicker({
         lang:'ru',
-        format: 'Y-m-d',
+        timepicker:false,
+        format: 'd/m/Y',
         defaultSelect: false
     });
 });

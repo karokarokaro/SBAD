@@ -5,12 +5,10 @@ import core.cache.ObjectCache;
 import core.database.Attributes;
 import core.database.DBAttribute;
 import core.database.DBObject;
-import core.entity.CampTypes;
 import core.entity.UserRoles;
 import core.exceptions.RedirectException;
 import core.helpers.TempHelper;
 import core.helpers.TemplateRenderer;
-import sun.plugin.javascript.navig.Array;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +46,7 @@ public class TaskEditorPage extends HtmlPage {
                 templateParams.put("user", user);
                 user.put("login", getUser().getLogin());
                 user.put("id", getUser().getId().toString());
-                user.put("fullName", getUser().getFullName());
+                user.put("fullName", getUser().getMiniInfo());
                 user.put("isAdmin", getUser().isAdmin());
                 user.put("isGuest", getUser().isGuest());
                 user.put("roleDescr", getUser().getRole().getDescription());
@@ -69,7 +67,12 @@ public class TaskEditorPage extends HtmlPage {
                     Map camp = new HashMap();
                     campaigns.add(camp);
                     camp.put("id", obj.getId().toString());
-                    camp.put("name",obj.getAttributeById(Attributes.NAME).getTextValue());
+                    if (obj.getAttributeById(Attributes.NAME) != null) {
+                        camp.put("name",obj.getAttributeById(Attributes.NAME).getTextValue());
+                    } else {
+                        camp.put("name","");
+                    }
+
 
                 }
                 List tasks = new ArrayList();
@@ -124,13 +127,13 @@ public class TaskEditorPage extends HtmlPage {
                     } else {
                         date.put("value", "");
                     }
-                    task.put("userFullName", getUser().getFullName());
+                    task.put("userFullName", getUser().getMiniInfo());
                     Map dateOnly = new HashMap();
                     task.put("dateOnly", dateOnly);
                     dateOnly.put("attrId", Attributes.DATE_ONLY);
                     DBAttribute dd = obj.getAttributeById(Attributes.DATE_ONLY);
                     if (dd != null) {
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                         dateOnly.put("value", dateFormat.format(dd.getTimestampValue()));
                     } else {
                         dateOnly.put("value", "");
@@ -142,7 +145,11 @@ public class TaskEditorPage extends HtmlPage {
                     Map name = new HashMap();
                     campaign.put("name", name);
                     name.put("attrId", Attributes.NAME);
-                    name.put("value", obj1.getAttributeById(Attributes.NAME).getTextValue());
+                    if (obj1.getAttributeById(Attributes.NAME) != null) {
+                        name.put("value", obj1.getAttributeById(Attributes.NAME).getTextValue());
+                    } else {
+                        name.put("value", "");
+                    }
                     Map address = new HashMap();
                     campaign.put("address", address);
                     address.put("attrId", Attributes.ADDRESS);

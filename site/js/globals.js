@@ -82,7 +82,6 @@ function initKarEditableOkButton($popup, getValue) {
             $.ajax({
                 type: "POST",
                 url: karedit.url,
-                mimeType: "multipart/form-data",
                 data: params,
                 dataType: "json",
                 success: function(json) {

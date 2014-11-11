@@ -4,6 +4,7 @@ import core.Logger;
 import core.entity.User;
 import core.exceptions.RedirectException;
 import core.helpers.SQLController;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,6 +52,7 @@ public class AbstractPage {
         try{
             request.setCharacterEncoding("UTF-8");
             response.setCharacterEncoding("UTF-8");
+
         } catch (Exception e) {
             Logger.error(e);
         }

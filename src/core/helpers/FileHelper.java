@@ -72,7 +72,7 @@ public class FileHelper {
             List<FileItem> items = upload.parseRequest(request);
             for (FileItem item: items) {
 
-                res.put(item.getFieldName(), item.getString());
+                res.put(item.getFieldName(), item.getString("UTF-8"));
                 if (!item.isFormField()) {
                     String fileName = item.getName();
                     if (!fileName.contains(".")) continue;
