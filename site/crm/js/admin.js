@@ -91,6 +91,15 @@ function prepareRejectTransferPopup($popup) {
     }
     return true;
 }
+function driverTaskCh(elem) {
+    var isChecked = $(elem).is(':checked');
+    if (isChecked) {
+        $(elem).closest("tr").removeClass("hidden-print");
+    } else {
+        $(elem).closest("tr").addClass("hidden-print");
+    }
+//    var campId = $(elem).closest("tr").attr("camp-id");
+}
 addInitFunction(function() {
     $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
     $('.addButton').click(function() {

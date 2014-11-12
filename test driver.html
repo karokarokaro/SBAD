@@ -285,7 +285,7 @@
                 <thead>
                 <tr>
                     <th class="seqCol">&nbsp;</th>
-                    <!--<th class="checkCol">&nbsp;</th>-->
+                    <th class="checkCol">&nbsp;</th>
                     <th class="nameCol">Компания</th>
                     <th class="contactsCol">Контакты</th>
                     <th class="addressCol">Адрес</th>
@@ -302,9 +302,9 @@
                 <#list tasks as task>
                     <tr obj-id="${task.id}" camp-id="${task.campaign.id}">
                         <td class="seqCol">${task.seqNumber}.</td>
-                        <!--<td class="checkCol">-->
-                            <!--<input type="checkbox"/>-->
-                        <!--</td>-->
+                        <td class="checkCol hidden-print">
+                            <input type="checkbox" checked onchange="driverTaskCh(this)"/>
+                        </td>
                         <td class="nameCol">
                             ${task.campaign.name.value}
                         </td>
