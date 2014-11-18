@@ -18,6 +18,9 @@
 
         <ul class="nav navbar-nav navbar-right navbar-user">
             <li class="dropdown user-dropdown">
+                <a href="/"><i class="fa fa-reply"></i> Перейти к звонкам</a>
+            </li>
+            <li class="dropdown user-dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list-alt"></i> Страницы<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <!--li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
@@ -292,10 +295,10 @@
                     <th class="seqCol">&nbsp;</th>
                     <th class="checkCol">&nbsp;</th>
                     <th class="nameCol">Компания</th>
-                    <th class="contactsCol">Контакты</th>
-                    <th class="addressCol">Адрес</th>
-                    <th class="schemeCol">Схема</th>
                     <th class="billNbrCol">Счет</th>
+                    <th class="addressCol">Адрес</th>
+                    <th class="contactsCol">Контакты</th>
+                    <th class="schemeCol">Схема</th>
                     <th class="commentsCol">Комментарий</th>
                     <th class="managerCol">Ответственный</th>
                     <th class="kmCol">КМ</th>
@@ -313,14 +316,16 @@
                         <td class="nameCol">
                             ${task.campaign.name.value}
                         </td>
+                        <td class="billNbrCol">
+                            <a href="#" data-type="textarea" data-pk="${task.id}" attr-id="${task.billNbr.attrId}" data-title="Введите номера счетов" class="editable editable-pre-wrapped editable-click" data-original-title="" title="">${task.billNbr.value}</a>
+                        </td>
+                        <td class="addressCol">
+                            ${task.campaign.address.value}
+                        </td>
                         <td class="contactsCol">
                             <script type="text/javascript">
                                 document.write(getDisplayContacts("${task.campaign.contacts.value}"));
                             </script>
-
-                        </td>
-                        <td class="addressCol">
-                            ${task.campaign.address.value}
                         </td>
                         <td class="schemeCol">
                             <#if task.campaign.scheme.uploaded>
@@ -328,9 +333,6 @@
                                 <#else>
                                 Не загружено
                             </#if>
-                        </td>
-                        <td class="billNbrCol">
-                            <a href="#" data-type="textarea" data-pk="${task.id}" attr-id="${task.billNbr.attrId}" data-title="Введите номера счетов" class="editable editable-pre-wrapped editable-click" data-original-title="" title="">${task.billNbr.value}</a>
                         </td>
                         <td class="commentsCol">
                             <a href="#" data-type="textarea" data-pk="${task.id}" attr-id="${task.comments.attrId}" data-title="Введите комментарий" class="editable editable-pre-wrapped editable-click" data-original-title="" title="">${task.comments.value}</a>

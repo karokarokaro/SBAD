@@ -18,6 +18,9 @@
 
         <ul class="nav navbar-nav navbar-right navbar-user">
             <li class="dropdown user-dropdown">
+                <a href="/"><i class="fa fa-reply"></i> Перейти к звонкам</a>
+            </li>
+            <li class="dropdown user-dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list-alt"></i> Страницы<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <!--li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
@@ -298,8 +301,8 @@
                     <th class="seqCol">&nbsp;</th>
                     <th class="checkCol">&nbsp;</th>
                     <th class="nameCol">Название компании</th>
-                    <th class="contactsCol">Контактные лица</th>
                     <th class="addressCol">Адрес</th>
+                    <th class="contactsCol">Контактные лица</th>
                     <th class="schemeCol">Схема</th>
                     <th class="kmCol">КМ</th>
                 </tr>
@@ -312,10 +315,10 @@
                             <input type="checkbox"/>
                         </td>
                         <td class="nameCol"><a href="#" data-type="text" data-pk="${campaign.id}" attr-id="${campaign.name.attrId}" data-title="Введите имя компании" class="editable editable-click">${campaign.name.value}</a></td>
+                        <td class="addressCol"><a href="#" data-type="text" data-pk="${campaign.id}" attr-id="${campaign.address.attrId}" data-title="Введите адрес" class="editable editable-click">${campaign.address.value}</a></td>
                         <td class="contactsCol">
                             <a href="#" attr-id="${campaign.contacts.attrId}" data-type="contacts" data-pk="${campaign.id}" data-value="${campaign.contacts.value}" data-title="Введите контактные данные" class="kareditable">${campaign.contacts.value}</a>
                         </td>
-                        <td class="addressCol"><a href="#" data-type="text" data-pk="${campaign.id}" attr-id="${campaign.address.attrId}" data-title="Введите адрес" class="editable editable-click">${campaign.address.value}</a></td>
                         <td class="schemeCol"><a href="#" data-type="file" data-pk="${campaign.id}" attr-id="${campaign.scheme.attrId}" data-value="${campaign.scheme.value}" data-title="Прикрепите изображение" class="kareditable">
                             <#if campaign.scheme.uploaded>
                                 Загружено

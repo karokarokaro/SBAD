@@ -287,10 +287,10 @@
                     <th class="seqCol">&nbsp;</th>
                     <th class="checkCol">&nbsp;</th>
                     <th class="nameCol">Компания</th>
-                    <th class="contactsCol">Контакты</th>
-                    <th class="addressCol">Адрес</th>
-                    <th class="schemeCol hidden-print">Схема</th>
                     <th class="billNbrCol">Счет</th>
+                    <th class="addressCol">Адрес</th>
+                    <th class="contactsCol">Контакты</th>
+                    <th class="schemeCol hidden-print">Схема</th>
                     <th class="commentsCol">Комментарий</th>
                     <th class="managerCol">Ответственный</th>
                     <th class="kmCol">КМ</th>
@@ -308,14 +308,17 @@
                         <td class="nameCol">
                             ${task.campaign.name.value}
                         </td>
+                        <td class="billNbrCol">
+                            ${task.billNbr.value}
+                        </td>
+                        <td class="addressCol">
+                            ${task.campaign.address.value}
+                        </td>
                         <td class="contactsCol">
                             <script type="text/javascript">
                                 document.write(getDisplayContacts("${task.campaign.contacts.value}"));
                             </script>
 
-                        </td>
-                        <td class="addressCol">
-                            ${task.campaign.address.value}
                         </td>
                         <td class="schemeCol  hidden-print">
                             <#if task.campaign.scheme.uploaded>
@@ -323,9 +326,6 @@
                                 <#else>
                                     Не загружено
                             </#if>
-                        </td>
-                        <td class="billNbrCol">
-                            ${task.billNbr.value}
                         </td>
                         <td class="commentsCol">
                             ${task.comments.value}
