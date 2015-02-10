@@ -37,7 +37,7 @@ public class DriverPage extends HtmlPage {
 
     protected void authorize() throws Exception {
         if (getUser() == null
-                || !UserRoles.Driver.equals(getUser().getRole())) throw new RedirectException("/crm/login.jsp");
+                || !UserRoles.Driver.equals(getUser().getRole())) throw new RedirectException("/login.jsp");
     }
 
 
@@ -219,6 +219,7 @@ public class DriverPage extends HtmlPage {
             }
         };
         out.append(body.render());
+
     }
 
     protected void parseParams() throws Exception {

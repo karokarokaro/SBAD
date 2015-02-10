@@ -68,20 +68,7 @@ public class LoginPage extends HtmlPage {
                         .equals(userDB.getAttributeById(Attributes.PASSWORD_HASH).getTextValue())) {
                     message = "Логин или пароль введены неверно.";
                 } else {
-                    User user = new User();
-                    user.setId(userDB.getId());
-                    DBAttribute roleAttr = userDB.getAttributeById(Attributes.ROLE);
-                    user.setRole(UserRoles.get(roleAttr.getTextValue()));
-                    user.setLogin(paramLogin);
-                    user.setPassHash(HashHelper.getPasswordHash(paramPassword));
-                    user.setLoginTime(new Timestamp(1));
-                    DBAttribute attr;
-                    attr = userDB.getAttributeById(Attributes.NAME);
-                    if (attr!=null) user.setName(attr.getTextValue());
-                    attr = userDB.getAttributeById(Attributes.SURNAME);
-                    if (attr!=null) user.setSurname(attr.getTextValue());
-                    attr = userDB.getAttributeById(Attributes.PATR_NAME);
-                    if (attr!=null) user.setPatrname(attr.getTextValue());
+                    User user = User.valueOf(userDB);
                     setUser(user);
                     throw new RedirectException("/");
                 }

@@ -34,7 +34,7 @@ public class TaskEditorPage extends HtmlPage {
     protected void authorize() throws Exception {
         if (getUser() == null
                 || !(UserRoles.Buyer.equals(getUser().getRole()) ||
-                UserRoles.Manager.equals(getUser().getRole()))) throw new RedirectException("/crm/login.jsp");
+                UserRoles.Manager.equals(getUser().getRole()))) throw new RedirectException("/login.jsp");
     }
 
 

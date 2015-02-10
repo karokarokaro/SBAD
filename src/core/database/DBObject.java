@@ -22,6 +22,10 @@ public class DBObject {
     private String typeName;
     private String typeDescription;
 
+    public void setAttributes(List<DBAttribute> attributes) {
+        this.attributes = attributes;
+    }
+
     public boolean deleteObject() {
         return core.helpers.DBHelper.deleteObject(id);
     }

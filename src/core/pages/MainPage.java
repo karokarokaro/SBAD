@@ -6,6 +6,7 @@ import core.database.Attributes;
 import core.database.DBAttribute;
 import core.database.DBObject;
 import core.entity.CampTypes;
+import core.entity.UserRoles;
 import core.exceptions.RedirectException;
 import core.helpers.TempHelper;
 import core.helpers.TemplateRenderer;
@@ -32,7 +33,11 @@ public class MainPage extends HtmlPage {
     }
 
     protected void authorize() throws Exception {
-        if (getUser() == null) throw new RedirectException("/login.jsp");
+        if (getUser() == null
+                ||  !(UserRoles.Buyer.equals(getUser().getRole()) ||
+                UserRoles.Manager.equals(getUser().getRole()) ||
+                UserRoles.Driver.equals(getUser().getRole()))) throw new RedirectException("/login.jsp");
+        if (UserRoles.Driver.equals(getUser().getRole())) throw new RedirectException("/crm/");
     }
 
     protected void renderBody() throws Exception {

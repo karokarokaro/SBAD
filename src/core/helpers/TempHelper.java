@@ -52,8 +52,10 @@ public class TempHelper {
     public static List<DBObject> getCampaignsByUser(User user) {
         List<BigInteger> ids = new ArrayList<BigInteger>();
         try {
-            ResultSet resultSet = SQLController.executeSelect("select object_id from vals where attr_id=" +
-                    Attributes.CREATED_BY + " and id_v = " + user.getId().toString());
+            ResultSet resultSet = SQLController.executeSelect("select object_id from vals v where v.attr_id=" +
+                    Attributes.CREATED_BY + " and v.id_v = " + user.getId().toString() +
+                    " and exists(select object_id from objects o where o.object_id=v.object_id and " +
+                    "o.object_type_id="+ObjectTypes.Campaign+")");
             while (resultSet.next()) {
                 BigInteger id = resultSet.getBigDecimal("object_id").toBigInteger();
                 ids.add(id);

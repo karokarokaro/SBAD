@@ -52,7 +52,7 @@ public class LoginPage2 extends HtmlPage {
         TemplateRenderer loginBody = new TemplateRenderer(request, response, new BigInteger("1413")) {
             protected void mapTemplateModel() throws Exception {
                 templateParams.put("message", message != null ? message : "");
-                templateParams.put("formUrl", "/crm/login.jsp");
+                templateParams.put("formUrl", "/login.jsp");
             }
         };
         out.append(loginBody.render());
@@ -76,7 +76,7 @@ public class LoginPage2 extends HtmlPage {
         } else if (ACT_LOGOUT.equals(paramAct)) {
             if(getUser() != null) {
                 removeUser();
-                throw new RedirectException("/crm/login.jsp");
+                throw new RedirectException("/login.jsp");
             }
         }
 

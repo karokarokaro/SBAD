@@ -68,7 +68,7 @@ public class ActionPage2 extends JSONPage {
     }
 
     protected void authorize() throws Exception {
-        if (getUser() == null) throw new RedirectException("/crm/login.jsp");
+        if (getUser() == null) throw new RedirectException("/login.jsp");
     }
     protected void executeAdd() throws Exception {
         Map<BigInteger, List> params = new HashMap<BigInteger, List>();

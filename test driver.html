@@ -30,7 +30,7 @@
                     <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
                     <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
                     <li class="divider"></li-->
-                    <li><a href="/crm/login.jsp?act=logout"><i class="fa fa-power-off"></i> Выйти</a></li>
+                    <li><a href="/login.jsp?act=logout"><i class="fa fa-power-off"></i> Выйти</a></li>
                 </ul>
             </li>
         </ul>
@@ -285,7 +285,7 @@
                 <thead>
                 <tr>
                     <th class="seqCol">&nbsp;</th>
-                    <th class="checkCol">&nbsp;</th>
+                    <th class="checkCol hidden-print">&nbsp;</th>
                     <th class="nameCol">Компания</th>
                     <th class="billNbrCol">Счет</th>
                     <th class="addressCol">Адрес</th>
@@ -293,7 +293,7 @@
                     <th class="schemeCol hidden-print">Схема</th>
                     <th class="commentsCol">Комментарий</th>
                     <th class="managerCol">Ответственный</th>
-                    <th class="kmCol">КМ</th>
+                    <th class="kmCol hidden-print">КМ</th>
                     <th class="dateCol">Дата</th>
                     <th class="dateTextCol">Время</th>
                 </tr>
@@ -333,7 +333,7 @@
                         <td class="managerCol">
                             ${task.userFullName}
                         </td>
-                        <td class="kmCol">
+                        <td class="kmCol hidden-print">
                             ${task.campaign.km.value}
                         </td>
                         <td class="dateCol">
